@@ -3,6 +3,8 @@ $(document).ready(function() {
     //Variables que tendran el id a seleccionar de la tabla
     var deleteUsuarioId = null;
     var editUsuarioId = null;
+
+    //Expresion regular para el manejo de contraseña
     const pattern = new RegExp("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[.@$!%*?&;+\\-*/])[^\\s]{8,25}$");
 
     // Función para cargar tipos de usuarios en el select
