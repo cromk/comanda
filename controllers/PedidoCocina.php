@@ -29,16 +29,16 @@ try {
             break;
 
         case 'PUT':
-            $data = json_decode(file_get_contents("php://input"), true);
+            //$data = json_decode(file_get_contents("php://input"), true);
             // Verifica que se haya pasado los campos
-            if (!isset($data['id_pedido']) || $data['estado']) {
+            //if (!isset($data['id_pedido']) || $data['estado']) {
                 // Si no, lanza una excepción indicando datos incompletos
-                throw new Exception('Datos incompletos');
-            }
+                //throw new Exception('Datos incompletos');
+            //}
             // Llama al método update del modelo para actualizar el estado de un pedido
-            $pedidoModel->updateStatus($data['id_pedido'],$data['estado']);
+            //$pedidoModel->updateStatus($data['id_pedido'],$data['estado']);
             // Establece la respuesta indicando éxito
-            $response = ['status' => 'success', 'message' => 'Estado del pedido actualizado'];
+            //$response = ['status' => 'success', 'message' => 'Estado del pedido actualizado'];
             break;
 
         default:
