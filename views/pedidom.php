@@ -129,7 +129,7 @@
           <div class="card my-4">
             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
               <div class="bg-gradient-new shadow-new border-radius-lg pt-2 pb-1">
-                <h6 class="text-white text-capitalize ps-3">SELECION DE MESA</h6>
+                <h6 class="text-white text-capitalize ps-3">SELECCIÓN DE MESA</h6>
               </div>
             </div>
             <div class="card-body px-0 pb-2">
