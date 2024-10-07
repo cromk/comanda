@@ -12,7 +12,7 @@ class Usuario {
     }
 
     public function readTable(){
-        $query = "SELECT id_usuario,tipo_usuario,nombre_usuario,apellido_usuario,mail,fecha_creacion FROM tipo_usuario tu, usuario u WHERE tu.id_tipo_usuario = u.id_tipo_usuario";
+        $query = "SELECT id_usuario,tipo_usuario,nombre_usuario,apellido_usuario,mail,fecha_creacion FROM tipo_usuario tu, usuario u WHERE tu.id_tipo_usuario = u.id_tipo_usuario ORDER BY id_usuario";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
