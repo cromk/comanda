@@ -3,6 +3,7 @@ $(document).ready(function() {
     //Variables que tendran el id a seleccionar de la tabla
     var deleteUsuarioId = null;
     var editUsuarioId = null;
+    var estado = 1;
 
     //Expresion regular para el manejo de contraseña
     const pattern = new RegExp("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[.@$!%*?&;+\\-*/])[^\\s]{8,25}$");
@@ -35,6 +36,8 @@ $(document).ready(function() {
 
     // Leer todos los usuario
     function readAllUsuarios() {
+        var btn = "";
+        var est = null;
         $.ajax({
             url: '../controllers/usuarioController.php',
             type: 'GET',
@@ -42,6 +45,18 @@ $(document).ready(function() {
                 // Aquí podrías actualizar tu tabla o lista con los datos recibidos
                 $('#body-t').empty();
                 response.forEach(function(usuario) {
+                    if(usuario.estado_usuario)
+                    {
+                        estado = 1;
+                        est = "Habilitado";
+                        btn = '<td class="text-center"><button class="btn bg-gradient-danger rw-20 mb-0 toast-btn deleteButton" data-id="'+ usuario.id_usuario + '">Deshabilitar</button></td>';
+                    }
+                    else
+                    {
+                        estado = 0;
+                        est = "Deshabilitado";
+                        btn = '<td class="text-center"><button class="btn bg-gradient-warning rw-20 mb-0 toast-btn deleteButton" data-id="'+ usuario.id_usuario + '">Habilitar</button></td>';
+                    }
                     $('#body-t').append(
                         '<tr><td class="text-center"><p class="text-xs font-weight-bold mb-0">'+ usuario.id_usuario + '</p></td>'+
                         '<td class="text-center"><p class="text-xs font-weight-bold mb-0">' + usuario.tipo_usuario + '</p></td>'+
@@ -49,7 +64,8 @@ $(document).ready(function() {
                         '<td class="text-center"><p class="text-xs font-weight-bold mb-0">' + usuario.apellido_usuario + '</p></td>'+
                         '<td class="text-center"><p class="text-xs font-weight-bold mb-0">' + usuario.mail + '</p></td>'+
                         '<td class="text-center"><p class="text-xs font-weight-bold mb-0">' + usuario.fecha_creacion + '</p></td>'+
-                        '<td class="text-center"><button class="btn bg-gradient-danger rw-20 mb-0 toast-btn deleteButton" data-id="'+ usuario.id_usuario + '">Eliminar</button></td>'+
+                        '<td class="text-center"><p class="text-xs font-weight-bold mb-0">' + est + '</p></td>'+
+                        btn +
                         '<td class="text-center"><button class="btn bg-gradient-info mb-0 toast-btn editButton" data-id="' + usuario.id_usuario + '">Modificar</button></td></tr>');
                 });
             },
@@ -139,12 +155,13 @@ $(document).ready(function() {
 
     // Confirmar eliminación
     $('#confirmDeleteButton').click(function() {
+        alert(estado);
         if (deleteUsuarioId !== null) {
             $.ajax({
                 url: '../controllers/UsuarioController.php',
                 type: 'DELETE',
                 contentType: 'application/json',
-                data: JSON.stringify({ id: deleteUsuarioId }),
+                data: JSON.stringify({ id: deleteUsuarioId, estado_usuario : estado }),
                 success: function(response) {
                     showMessage('success', response.message);
                     $('#confirmDeleteModal').modal('hide');
