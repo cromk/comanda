@@ -3,7 +3,7 @@ $(document).ready(function() {
     //Variables que tendran el id a seleccionar de la tabla
     var deleteUsuarioId = null;
     var editUsuarioId = null;
-    var estado = 1;
+    var estado = true;
 
     //Expresion regular para el manejo de contraseña
     const pattern = new RegExp("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[.@$!%*?&;+\\-*/])[^\\s]{8,25}$");
@@ -47,15 +47,13 @@ $(document).ready(function() {
                 response.forEach(function(usuario) {
                     if(usuario.estado_usuario)
                     {
-                        estado = 1;
                         est = "Habilitado";
-                        btn = '<td class="text-center"><button class="btn bg-gradient-danger rw-20 mb-0 toast-btn deleteButton" data-id="'+ usuario.id_usuario + '">Deshabilitar</button></td>';
+                        btn = '<td class="text-center"><button class="btn bg-gradient-danger rw-20 mb-0 toast-btn deleteButton" data-id="'+ usuario.id_usuario + '-' + usuario.estado_usuario + '">Deshabilitar</button></td>';
                     }
                     else
                     {
-                        estado = 0;
                         est = "Deshabilitado";
-                        btn = '<td class="text-center"><button class="btn bg-gradient-warning rw-20 mb-0 toast-btn deleteButton" data-id="'+ usuario.id_usuario + '">Habilitar</button></td>';
+                        btn = '<td class="text-center"><button class="btn bg-gradient-warning rw-20 mb-0 toast-btn deleteButton" data-id="'+ usuario.id_usuario + '-' + usuario.estado_usuario + '">Habilitar</button></td>';
                     }
                     $('#body-t').append(
                         '<tr><td class="text-center"><p class="text-xs font-weight-bold mb-0">'+ usuario.id_usuario + '</p></td>'+
@@ -127,7 +125,10 @@ $(document).ready(function() {
 
     // Abrir modal de confirmación de eliminación
     $('#usuarioTable').on('click', '.deleteButton', function() {
-        deleteUsuarioId = $(this).data('id');
+        dataId = $(this).data('id');
+        let [indicator1, indicator2] = dataId.split('-');
+        deleteUsuarioId = indicator1;
+        estado = indicator2;
         $('#confirmDeleteModal').modal('show');
     });
 
@@ -155,13 +156,14 @@ $(document).ready(function() {
 
     // Confirmar eliminación
     $('#confirmDeleteButton').click(function() {
-        alert(estado);
+        var v = false;
+        if(estado) v = 0; else v = 1;
         if (deleteUsuarioId !== null) {
             $.ajax({
                 url: '../controllers/UsuarioController.php',
                 type: 'DELETE',
                 contentType: 'application/json',
-                data: JSON.stringify({ id: deleteUsuarioId, estado_usuario : estado }),
+                data: JSON.stringify({ id: deleteUsuarioId, estado_usuario : v }),
                 success: function(response) {
                     showMessage('success', response.message);
                     $('#confirmDeleteModal').modal('hide');
