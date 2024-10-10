@@ -205,6 +205,7 @@
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">APELLIDO/S</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">CORREO</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">FECHA INGRESO</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ESTADO USUARIO</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" colspan="2">ACCIONES</th>
                     </tr>
                   </thead>
@@ -233,15 +234,15 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar Eliminación</h5>
+          <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmacion</h5>
         <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">x</span>
         </button>
       </div>
-      <div class="modal-body">¿Está seguro de que desea eliminar este usuario?</div>
+      <div class="modal-body">¿Está seguro de que desea deshabilitar este usuario?</div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-danger" id="confirmDeleteButton">Eliminar</button>
+          <button type="button" class="btn btn-danger" id="confirmDeleteButton">Deshabilitar</button>
         </div>
       </div>
     </div>

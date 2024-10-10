@@ -1,15 +1,15 @@
 $(document).ready(function() {
     //Variable que contrala el numero de mesa seleccionada
     var mesa = null;
+    var id_mesero = null;
+
     // VARIABLE ASIGNADA PARA EL PEDIDO COMO OBJETO
     const pedido = {
-        estado: "nuevo",
-        id_cliente: 1,
+        estado: "Nuevo",
         num_mesa: null,
-        id_mesero: id_mesero,
+        id_mesero: null,
         lineas_pedido: [],
     }
-    console.log(pedido);
 
     // Mostrar mensajes en el alert
     function showMessage(type, message) {
@@ -53,6 +53,7 @@ $(document).ready(function() {
      // Maneja el evento click en el botón de selección de mesa
     $('#selectMesa').click(function() {
         mesa = $('#mesas').val();// Obtiene el valor de la mesa seleccionada
+        id_mesero = $('#id_mesero').val(); //Obtiene el codigo del mesero
         var data = { num_mesa : mesa, estado : 'O'};// Datos para la solicitud
         $.ajax({// Realiza una solicitud AJAX para actualizar el estado de la mesa
             url: '../controllers/PedidoController.php',
@@ -66,13 +67,7 @@ $(document).ready(function() {
                 $('#btns').append('<button type="button" id="changeMesa" class="btn bg-gradient-warning toast-btn">CAMBIAR DE MESA</button>');
                 //Se agrega boton para agregar nuevo producto al pedido
                 $('#btns').append('<button type="button" id="newProduct" class="btn bg-gradient-info toast-btn" data-bs-toggle="modal" data-bs-target="#productModal">+ PRODUCTO</button>');
-                //Se agrega input de fecha
-                $('#dato').append('<div class="mb-2 form-inline><label class="form-label" for="fecha">Fecha:</label><input type="text" class="form-control border" id="fecha" readonly></div><div class="mb-2"></div>');
-                //Se agrega select de cliente
-                $('#dato').append('<div class="form-inline"><label class="form-label" for="cliente">Cliente:</label><select name="cliente" id="cliente" class="form-control border"></select><button type="button" id="selectCliente" class="btn bg-gradient-info toast-btn">Seleccionar</button></div>');
                 $('#tdatos').empty();//Se limpia la tabla de productos
-                //Se agrega input de total
-                $('#tdatos').append('<div class="d-flex align-items-center mb-2"><label class="form-label me-2" for="total">Total: $</label><div class="col-8"><input type="text" class="form-control border" id="total" readonly></div></div>');
                 //Se agrega boton para enviar pedido a cocina
                 $('#fin').append('<div class="mb-2"><button type="button" id="realizarPedido" class="btn bg-gradient-success toast-btn">REALIZAR PEDIDO</button></div>');
             },
@@ -95,7 +90,6 @@ $(document).ready(function() {
                 $('#selectMesa').prop('disabled', false);// Habilita el botón de selección de mesa
                 $('#fin').empty();//Elimina los elementos agregados en el div fin
                 $('#btns').empty();//Elimina los botones agregados en el div btns
-                $('#dato').empty();//Elimina los elementos agregados en el div dato
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 showMessage('danger', "Error en la solicitud: " + textStatus + " - " + errorThrown);
@@ -154,6 +148,7 @@ $(document).ready(function() {
 
     $(document).on('click', '#realizarPedido', () => {
         pedido.num_mesa = mesa;
+        pedido.id_mesero = id_mesero;
         pedido.lineas_pedido = []; // Inicializa el array para evitar acumulaciones
     
         $('#body-t tr').each(function() {
@@ -181,39 +176,41 @@ $(document).ready(function() {
             data: data,
             success: function(response) {
                 if (response.status === 'success') {
-                    // Mensaje de éxito o alert
-                    alert(response.message); 
-                    // Recargar la página
-                    location.reload();
+                    $('#body-t').empty();//Se limpia la tabla de productos
+                    $('#selectMesa').prop('disabled', false);//Desabilita el boton de seleccionar mesa
+                    $('#fin').empty();//Elimina los elementos agregados en el div fin
+                    $('#btns').empty();//Elimina los botones agregados en el div btns
+                    showMessage('success','Pedido registrado con exito');
+                    cargarMesasDisponibles();
                 } else {
                     // Manejar el error
-                    alert('Error: ' + response.message);
+                    showMessage('warning', "Error al cargar productos: " + response.message);
                 }
             },
             error: function(xhr, status, error) {
                 // Manejar errores de la solicitud AJAX
                 console.error('AJAX error:', status, error);
                 console.log('AJAX error:'+ "ESTATUS:"+ status + "ERROR" + error);
-                alert('Ha ocurrido un error en la solicitud. Por favor, intenta nuevamente.'+status+" "+ error + "  XHR  " +xhr);
                 console.log(xhr);
+                showMessage('danger', "Error al guardar pedido: " + textStatus + " - " + errorThrown);
             }
         });
     });
     
     
 
-    // // Inicializar DataTable para productos
-    // $('#productTable').DataTable({
-    //     "language": {// Configura el lenguaje de la DataTable en español
-    //         "url": "//cdn.datatables.net/plug-ins/1.11.3/i18n/es_es.json"
-    //     }
-    // });
+    // Inicializar DataTable para productos
+    $('#productTable').DataTable({
+        "language": {// Configura el lenguaje de la DataTable en español
+            "url": "https://cdn.datatables.net/plug-ins/1.11.3/i18n/es_es.json"
+        }
+    });
 
 
-    // Inicializar DataTable para productos pero con archivo local
+    /* Inicializar DataTable para productos pero con archivo local
     $('#productTable').DataTable({
         "language": {// Configura el lenguaje de la DataTable en español
             "url": "http://localhost/comanda/i18n/es_es.json"
         }
-    });
+    });*/
 });

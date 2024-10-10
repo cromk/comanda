@@ -44,11 +44,11 @@ try {
 
         case 'DELETE':
             $data = json_decode(file_get_contents("php://input"), true);
-            if (!isset($data['id'])) {
+            if (!isset($data['id']) || !isset($data['estado_usuario'])) {
                 throw new Exception('Datos incompletos');// Si no, lanza una excepción indicando datos incompletos
             }
-            $usuarioModel->delete($data['id']);
-            $response = ['status' => 'success', 'message' => 'Usuario eliminado con éxito'];
+            $usuarioModel->deshabilitar($data['id'],$data['estado_usuario']);
+            $response = ['status' => 'success', 'message' => 'Usuario deshabilitado con éxito'];
             break;
 
         default:

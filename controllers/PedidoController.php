@@ -29,12 +29,12 @@ try {
                 $data = json_decode(file_get_contents("php://input"), true);
         
                 // Verifica que se hayan pasado los campos necesarios
-                if (!isset($data['estado']) || !isset($data['id_cliente']) || !isset($data['num_mesa']) || !isset($data['id_mesero']) || !isset($data['lineas_pedido'])) {
+                if (!isset($data['estado']) || !isset($data['num_mesa']) || !isset($data['id_mesero']) || !isset($data['lineas_pedido'])) {
                     throw new Exception('Datos incompletos');
                 }
         
                 // Crear el pedido
-                $id_pedido = $pedidoModel->createPedido($data['estado'], $data['id_cliente'], $data['num_mesa'], $data['id_mesero']);
+                $id_pedido = $pedidoModel->createPedido($data['estado'], $data['num_mesa'], $data['id_mesero']);
                 if (!$id_pedido) {
                     throw new Exception('Error al crear el pedido');
                 }

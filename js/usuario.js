@@ -3,6 +3,10 @@ $(document).ready(function() {
     //Variables que tendran el id a seleccionar de la tabla
     var deleteUsuarioId = null;
     var editUsuarioId = null;
+    var estado = true;
+
+    //Expresion regular para el manejo de contraseña
+    const pattern = new RegExp("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[.@$!%*?&;+\\-*/])[^\\s]{8,25}$");
 
     // Función para cargar tipos de usuarios en el select
     function loadTiposUsuario() {
@@ -32,6 +36,8 @@ $(document).ready(function() {
 
     // Leer todos los usuario
     function readAllUsuarios() {
+        var btn = "";
+        var est = null;
         $.ajax({
             url: '../controllers/usuarioController.php',
             type: 'GET',
@@ -39,6 +45,16 @@ $(document).ready(function() {
                 // Aquí podrías actualizar tu tabla o lista con los datos recibidos
                 $('#body-t').empty();
                 response.forEach(function(usuario) {
+                    if(usuario.estado_usuario)
+                    {
+                        est = "Habilitado";
+                        btn = '<td class="text-center"><button class="btn bg-gradient-danger rw-20 mb-0 toast-btn deleteButton" data-id="'+ usuario.id_usuario + '-' + usuario.estado_usuario + '">Deshabilitar</button></td>';
+                    }
+                    else
+                    {
+                        est = "Deshabilitado";
+                        btn = '<td class="text-center"><button class="btn bg-gradient-warning rw-20 mb-0 toast-btn deleteButton" data-id="'+ usuario.id_usuario + '-' + usuario.estado_usuario + '">Habilitar</button></td>';
+                    }
                     $('#body-t').append(
                         '<tr><td class="text-center"><p class="text-xs font-weight-bold mb-0">'+ usuario.id_usuario + '</p></td>'+
                         '<td class="text-center"><p class="text-xs font-weight-bold mb-0">' + usuario.tipo_usuario + '</p></td>'+
@@ -46,7 +62,8 @@ $(document).ready(function() {
                         '<td class="text-center"><p class="text-xs font-weight-bold mb-0">' + usuario.apellido_usuario + '</p></td>'+
                         '<td class="text-center"><p class="text-xs font-weight-bold mb-0">' + usuario.mail + '</p></td>'+
                         '<td class="text-center"><p class="text-xs font-weight-bold mb-0">' + usuario.fecha_creacion + '</p></td>'+
-                        '<td class="text-center"><button class="btn bg-gradient-danger rw-20 mb-0 toast-btn deleteButton" data-id="'+ usuario.id_usuario + '">Eliminar</button></td>'+
+                        '<td class="text-center"><p class="text-xs font-weight-bold mb-0">' + est + '</p></td>'+
+                        btn +
                         '<td class="text-center"><button class="btn bg-gradient-info mb-0 toast-btn editButton" data-id="' + usuario.id_usuario + '">Modificar</button></td></tr>');
                 });
             },
@@ -65,46 +82,53 @@ $(document).ready(function() {
         var password = $('#upassword').val();
         var confcontrasenia = $('#confcontrasenia').val();
 
-        //Validar contraseñas
-        if (password != confcontrasenia) {
-            showMessage('danger', 'Las contraseñas no coinciden');
-            return;
-        }
-
-        if (!nombre_usuario || !apellido_usuario || !mail || !password) {
-            showMessage('danger', "Todos los campos son obligatorios");
-            return;
-        }
-
-        var url = '../controllers/usuarioController.php';
-        var method = 'POST';
-        var data = { id_tipo_usuario: id_tipo_usuario, nombre_usuario: nombre_usuario, apellido_usuario: apellido_usuario, mail: mail, password: password } ;
-
-        if (editUsuarioId !== null) {
-            method = 'PUT';
-            data.id = editUsuarioId;
-        }
-
-        $.ajax({
-            url: url,
-            type: method,
-            contentType: 'application/json',
-            data: JSON.stringify(data),
-            success: function(response) {
-                showMessage('success', response.message);
-                resetForm();
-                $('#actionUsuarioButton').text('Guardar');
-                editUsuarioId = null;
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                showMessage('danger', "Error en la solicitud: " + textStatus + " - " + errorThrown);
+        if (!pattern.test(password)) {
+            // Contraseña invalida
+            showMessage('warning', "Error, la contraseña no cumple con alguno de los requisitos /n Almenos una mayúscula, una minúscula, un numero, un carácter especial, que no tenga espacios");
+        } else {
+            if (password != confcontrasenia) {
+                showMessage('danger', 'Las contraseñas no coinciden');
+                return;
             }
-        });
+
+            if (!nombre_usuario || !apellido_usuario || !mail || !password) {
+                showMessage('danger', "Todos los campos son obligatorios");
+                return;
+            }
+
+            var url = '../controllers/usuarioController.php';
+            var method = 'POST';
+            var data = { id_tipo_usuario: id_tipo_usuario, nombre_usuario: nombre_usuario, apellido_usuario: apellido_usuario, mail: mail, password: password } ;
+
+            if (editUsuarioId !== null) {
+                method = 'PUT';
+                data.id = editUsuarioId;
+            }
+
+            $.ajax({
+                url: url,
+                type: method,
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: function(response) {
+                    showMessage('success', response.message);
+                    resetForm();
+                    $('#actionUsuarioButton').text('Guardar');
+                    editUsuarioId = null;
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    showMessage('danger', "Error en la solicitud: " + textStatus + " - " + errorThrown);
+                }
+            }); 
+        }
     });
 
     // Abrir modal de confirmación de eliminación
     $('#usuarioTable').on('click', '.deleteButton', function() {
-        deleteUsuarioId = $(this).data('id');
+        dataId = $(this).data('id');
+        let [indicator1, indicator2] = dataId.split('-');
+        deleteUsuarioId = indicator1;
+        estado = indicator2;
         $('#confirmDeleteModal').modal('show');
     });
 
@@ -132,12 +156,14 @@ $(document).ready(function() {
 
     // Confirmar eliminación
     $('#confirmDeleteButton').click(function() {
+        var v = false;
+        if(estado) v = 0; else v = 1;
         if (deleteUsuarioId !== null) {
             $.ajax({
                 url: '../controllers/UsuarioController.php',
                 type: 'DELETE',
                 contentType: 'application/json',
-                data: JSON.stringify({ id: deleteUsuarioId }),
+                data: JSON.stringify({ id: deleteUsuarioId, estado_usuario : v }),
                 success: function(response) {
                     showMessage('success', response.message);
                     $('#confirmDeleteModal').modal('hide');

@@ -12,7 +12,7 @@ class Usuario {
     }
 
     public function readTable(){
-        $query = "SELECT id_usuario,tipo_usuario,nombre_usuario,apellido_usuario,mail,fecha_creacion FROM tipo_usuario tu, usuario u WHERE tu.id_tipo_usuario = u.id_tipo_usuario";
+        $query = "SELECT id_usuario,tipo_usuario,nombre_usuario,apellido_usuario,mail,fecha_creacion,estado_usuario FROM tipo_usuario tu, usuario u WHERE tu.id_tipo_usuario = u.id_tipo_usuario ORDER BY id_usuario";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -52,7 +52,7 @@ class Usuario {
         $stmt->bindParam(':nombre_usuario', $nombre_usuario);
         $stmt->bindParam(':apellido_usuario', $apellido_usuario);
         $stmt->bindParam(':mail', $mail);
-       $stmt->bindParam(':password', $password);
+        $stmt->bindParam(':password', $password);
         $stmt->bindParam(':id_tipo_usuario', $id_tipo_usuario);
         $stmt->execute();
     }
@@ -61,6 +61,14 @@ class Usuario {
         $query = "DELETE FROM " . $this->table_name . " WHERE id_usuario = :id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':id', $id);
+        $stmt->execute();
+    }
+
+    public function deshabilitar($id,$estado){
+        $query = "UPDATE " . $this->table_name . " SET estado_usuario = :estado WHERE id_usuario = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':estado', $estado);
         $stmt->execute();
     }
 

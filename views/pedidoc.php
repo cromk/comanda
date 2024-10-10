@@ -6,6 +6,9 @@
     header("Location: ../views/mesero.php");
   elseif (!isset($_SESSION['user']) || $_SESSION['tpu'] > 3) 
     header("Location: ../login.php");
+  // Obtener la hora del servidor
+  date_default_timezone_set('America/El_Salvador'); // Ajusta la zona horaria
+  $hora_servidor = date('H:i:s');
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -26,6 +29,7 @@
   <!-- Bootstrap JS -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
   <!-- Custom JS -->
+  <script> var horaServidor = "<?php echo $hora_servidor; ?>"; </script>
   <script src="../js/pedidoc.js"></script>
 </head>
 
@@ -42,7 +46,7 @@
     <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link text-white active bg-gradient-new" href="cocinero.php">
+          <a class="nav-link text-white" href="cocinero.php">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
               <i class="material-icons opacity-10">dashboard</i>
             </div>
@@ -53,7 +57,7 @@
           <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">Principal</h6>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-white " href="pedidoc.php">
+          <a class="nav-link text-white active bg-gradient-new" href="pedidoc.php">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
               <i class="material-icons opacity-10">search</i>
             </div>
@@ -145,28 +149,41 @@
       </footer>
     </div>
   </main>
-  <!-- Modal de Confirmación de Eliminación -->
-    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar Eliminación</h5>
-                    <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">x</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    ¿Está seguro de que desea eliminar esta categoria?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-danger" id="confirmDeleteButton">Eliminar</button>
-                </div>
-            </div>
+  <!-- Modal de Productos -->
+  <div class="modal fade" id="detalleModal" tabindex="-1" aria-labelledby="detalleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="detalleModalLabel">Detalle del Pedido</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
+        <div class="modal-body">
+          <table id="productsTable" class="display" style="width:100%">
+            <thead>
+              <tr>
+                <th>Producto</th>
+                <th>Cantidad</th>
+              </tr>
+            </thead>
+            <tbody> <!-- Cargar productos vía AJAX --></tbody>
+          </table>
+        </div>
+      </div>
     </div>
+  </div>
   <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
-  <script src="../js/material-dashboard.min.js"></script>
+  <<!-- Core JS Files -->
+  <script src="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css"></script>
+  <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
+  <script src="https://cdn.datatables.net/2.0.8/js/dataTables.bootstrap5.js"></script>
+  <script src="../js/core/popper.min.js"></script>
+  <script src="../js/core/bootstrap.min.js"></script>
+  <script src="../js/plugins/perfect-scrollbar.min.js"></script>
+  <script src="../js/plugins/smooth-scrollbar.min.js"></script>
+  <!-- Github buttons -->
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+  <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
+  <script src="../js/material-dashboard.min.js?v=3.1.0"></script>
 </body>
 
 </html>

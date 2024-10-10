@@ -1,5 +1,5 @@
 <?php
-session_start();
+  session_start();
   if (!isset($_SESSION['user']) || $_SESSION['tpu'] == 1)
       header("Location: ../views/admin.php");
   elseif (!isset($_SESSION['user']) || $_SESSION['tpu'] == 3) 
@@ -129,7 +129,7 @@ session_start();
           <div class="card my-4">
             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
               <div class="bg-gradient-new shadow-new border-radius-lg pt-2 pb-1">
-                <h6 class="text-white text-capitalize ps-3">SELECION DE MESA</h6>
+                <h6 class="text-white text-capitalize ps-3">SELECCIÓN DE MESA</h6>
               </div>
             </div>
             <div class="card-body px-0 pb-2">
@@ -157,7 +157,8 @@ session_start();
             <div class="card-body px-0 pb-2">
               <div id="btns" class="d-grid gap-2 d-md-flex justify-content-md-end margen-form">
               </div>
-              <div id="dato" class="margen-form col-12">
+              <div class="d-grid gap-2 d-md-flex justify-content-md margen-form">
+                ID Mesero: <input type="text" name="id_mesero" id="id_mesero" disabled value="<?php echo $_SESSION['user_id']; ?>">
               </div>
               <div class="table-responsive p-0">
                 <table class="table align-items-center mb-0" id="tipoUsuarioTable">
@@ -233,11 +234,9 @@ session_start();
   <script src="../js/material-dashboard.min.js?v=3.1.0"></script>
   <script>
     // Asegúrate de que 'id_mesero' esté escapado correctamente para JavaScript
-    var id_mesero = <?php echo $_SESSION['user_id']?>;
-    console.log("ID del mesero logueado: " + id_mesero);
+    //var id_mesero = (<?php echo $id; ?> != '') ? <?php echo $id; ?> : null;
 
-    // Ahora puedes usar 'id_mesero' en tu lógica JavaScript
-</script>
+  </script>
 
 
   <script src="../js/pedidom.js"></script>
