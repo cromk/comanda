@@ -11,7 +11,7 @@ $(document).ready(function() {
     // Función para cargar tipos de usuarios en el select
     function loadTiposUsuario() {
         $.ajax({
-            url: '../controllers/usuarioController.php?tipo_usuario=true',
+            url: '../controllers/UsuarioController.php?tipo_usuario=true',
             type: 'GET',
             success: function(response) {
                 var select = $('#u_tipo_usuario');
@@ -39,7 +39,7 @@ $(document).ready(function() {
         var btn = "";
         var est = null;
         $.ajax({
-            url: '../controllers/usuarioController.php',
+            url: '../controllers/UsuarioController.php',
             type: 'GET',
             success: function(response) {
                 // Aquí podrías actualizar tu tabla o lista con los datos recibidos
@@ -96,7 +96,7 @@ $(document).ready(function() {
                 return;
             }
 
-            var url = '../controllers/usuarioController.php';
+            var url = '../controllers/UsuarioController.php';
             var method = 'POST';
             var data = { id_tipo_usuario: id_tipo_usuario, nombre_usuario: nombre_usuario, apellido_usuario: apellido_usuario, mail: mail, password: password } ;
 
@@ -136,7 +136,7 @@ $(document).ready(function() {
     $('#usuarioTable').on('click', '.editButton', function() {
         var id = $(this).data('id');
         $.ajax({
-            url: '../controllers/usuarioController.php?id=' + id,
+            url: '../controllers/UsuarioController.php?id=' + id,
             type: 'GET',
             success: function(response) {
                 $('#u_tipo_usuario').val(response.id_tipo_usuario);
