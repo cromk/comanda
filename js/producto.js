@@ -5,7 +5,7 @@ $(document).ready(function() {
 
     function loadCategorias() {
         $.ajax({
-            url: '../controllers/productoController.php?categoria=true',
+            url: '../controllers/ProductoController.php?categoria=true',
             type: 'GET',
             success: function(response) {
                 var select = $('#id_categoria');
@@ -15,7 +15,7 @@ $(document).ready(function() {
                 });
             },
             error: function(jqXHR, textStatus, errorThrown) {
-                showMessage('danger', "Error al cargar tipos de usuarios: " + textStatus + " - " + errorThrown);
+                showMessage('danger', "Error al cargar las categorias del producto: " + textStatus + " - " + errorThrown);
             }
         });
     }
