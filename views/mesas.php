@@ -196,44 +196,43 @@
   <script src="https://cdn.datatables.net/2.0.8/js/dataTables.bootstrap5.js"></script>
   <script>
     $(document).ready(function() {
+    var table = $('#myTable').DataTable({
+        language: {
+            url: 'https://cdn.datatables.net/plug-ins/2.0.8/i18n/es-ES.json'
+        }
+    });
 
-      var table = $('#myTable').DataTable({
-          language: {
-              url: 'https://cdn.datatables.net/plug-ins/2.0.8/i18n/es-ES.json'
-          }
-      });
+    $('#cuerpo').on('click', '.editButton', function() {
+        var id = $(this).data('id');
+        $('#confirmModal').data('id', id).modal('show');
+    });
 
-      $('#cuerpo').on('click', '.editButton', function() {
-          var id = $(this).data('id');
-          $('#confirmModal').data('id', id).modal('show');
-      });
+    $('#confirmModal').on('click', '.cancel', function() {
+        $('#confirmModal').modal('hide');
+    });
 
-      $('#confirmModal').on('click', '.cancel', function() {
-          $('#confirmModal').modal('hide');
-      });
+    $('#confirmModal').on('click', '.update', function() {
+        var id = $('#confirmModal').data('id');
+        var estado = $('#estado').val();
 
-      $('#confirmModal').on('click', '.update', function() {
-          var id = $('#confirmModal').data('id');
-          var estado = $('#estado').val();
+        // Llamada AJAX para actualizar el estado en el servidor usando PUT y un diferenciador
+        $.ajax({
+            url: '../controllers/MesaController.php', 
+            method: 'PUT',  // Usamos PUT en lugar de PUT2
+            contentType: 'application/json',
+            data: JSON.stringify({ id: id, estado: estado, updateEstado: true }),  // Diferenciador updateEstado
+            success: function(response) {
+                location.reload();
+                $('#confirmModal').modal('hide');
+            },
+            error: function(xhr, status, error) {
+                // Manejar error
+                console.error(error);
+            }
+        });
+    });
+});
 
-          // Llamada AJAX para actualizar el estado en el servidor
-          $.ajax({
-              url: '../controllers/MesaController.php', 
-              method: 'PUT2',
-              contentType: 'application/json',
-              data: JSON.stringify({ id: id, estado: estado }),
-              success: function(response) {
-                  // Destruir y volver a inicializar el DataTable
-                  location.reload();
-                  $('#confirmModal').modal('hide');
-              },
-              error: function(xhr, status, error) {
-                  // Manejar error
-                  console.error(error);
-              }
-          });
-      });
-  });
   </script>
   <script type="text/javascript" src="../js/mesa.js"></script>
 </body>
