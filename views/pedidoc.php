@@ -1,11 +1,12 @@
 <?php
   session_start();
-  if (!isset($_SESSION['user']) || $_SESSION['tpu'] == 1)
-      header("Location: ../views/admin.php");
-  elseif (!isset($_SESSION['user']) || $_SESSION['tpu'] == 2) 
-    header("Location: ../views/mesero.php");
-  elseif (!isset($_SESSION['user']) || $_SESSION['tpu'] > 3) 
+  if (!isset($_SESSION['user'])) {
     header("Location: ../login.php");
+  } elseif ($_SESSION['tpu'] == 1) {
+      header("Location: ../views/admin.php");
+  } elseif ($_SESSION['tpu'] == 2) {
+      header("Location: ../views/mesero.php");
+  }
   // Obtener la hora del servidor
   date_default_timezone_set('America/El_Salvador'); // Ajusta la zona horaria
   $hora_servidor = date('H:i:s');
@@ -30,7 +31,9 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
   <!-- Custom JS -->
   <script> var horaServidor = "<?php echo $hora_servidor; ?>"; </script>
-  <script src="../js/pedidoc.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link id="pagestyle" href="../css/material-dashboard.css" rel="stylesheet" />
 </head>
 
 <body class="g-sidenav-show  bg-gray-200">
@@ -172,7 +175,7 @@
     </div>
   </div>
   <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
-  <<!-- Core JS Files -->
+  <!-- Core JS Files -->
   <script src="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css"></script>
   <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
   <script src="https://cdn.datatables.net/2.0.8/js/dataTables.bootstrap5.js"></script>
@@ -184,6 +187,7 @@
   <script async defer src="https://buttons.github.io/buttons.js"></script>
   <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
   <script src="../js/material-dashboard.min.js?v=3.1.0"></script>
+  <script src="../js/pedidoc.js"></script>
 </body>
 
 </html>

@@ -232,13 +232,6 @@
   <script async defer src="https://buttons.github.io/buttons.js"></script>
   <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
   <script src="../js/material-dashboard.min.js?v=3.1.0"></script>
-  <script>
-    // Asegúrate de que 'id_mesero' esté escapado correctamente para JavaScript
-    //var id_mesero = (<?php echo $id; ?> != '') ? <?php echo $id; ?> : null;
-
-  </script>
-
-
   <script src="../js/pedidom.js"></script>
 </body>
 
