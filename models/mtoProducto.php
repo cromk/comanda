@@ -13,7 +13,7 @@ class Producto {
 
     //Funcion que muestra todos los registros de la tabla
     public function readAll() {
-        $query = "SELECT id_item, nombre_categoria, nombre, descripcion, precio, CASE WHEN estado = 0 THEN 'AGOTADO' WHEN estado = 1 THEN 'DISPONIBLE' END AS estado, foto FROM menuitem m, categoria c WHERE m.id_categoria = c.id_categoria ORDER BY m.id_categoria";
+        $query = "SELECT id_item, nombre_categoria, nombre, descripcion, precio, CASE WHEN estado = 0 THEN 'AGOTADO' WHEN estado = 1 THEN 'DISPONIBLE' END AS estado, foto FROM menuitem m, categoria c WHERE m.id_categoria = c.id_categoria ORDER BY m.id_categoria ORDER BY id_item";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);

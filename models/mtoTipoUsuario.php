@@ -13,7 +13,7 @@ class TipoUsuario {
 
     //Funcion que muestra todos los registros de la tabla
     public function readAll() {
-        $query = "SELECT * FROM " . $this->table_name;
+        $query = "SELECT * FROM " . $this->table_name . " ORDER BY id_tipo_usuario";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
