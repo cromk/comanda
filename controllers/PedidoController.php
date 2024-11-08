@@ -26,7 +26,7 @@ try {
             else if (isset($_GET['pedido'])) {
                 if (isset($_GET['id'])) {
                     // Si se pasa un ID, obtener detalles del pedido específico
-                    $pedidoDetalles = $pedidoModel->detalle($_GET['id']);
+                    $pedidoDetalles = $pedidoModel->detallef($_GET['id']);
                     if ($pedidoDetalles) {
                         $response = [
                             'status' => 'success',
