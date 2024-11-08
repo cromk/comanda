@@ -1,15 +1,16 @@
 <?php
-  session_start();
-  if (!isset($_SESSION['user']) || $_SESSION['tpu'] == 2)
-      header("Location: ../views/mesero.php");
-  elseif (!isset($_SESSION['user']) || $_SESSION['tpu'] == 3) 
-    header("Location: ../views/cocinero.php");
-  elseif (!isset($_SESSION['user']) || $_SESSION['tpu'] > 3) 
-    header("Location: ../login.php");
+session_start();
+if (!isset($_SESSION['user']) || $_SESSION['tpu'] == 2)
+  header("Location: ../views/mesero.php");
+elseif (!isset($_SESSION['user']) || $_SESSION['tpu'] == 3)
+  header("Location: ../views/cocinero.php");
+elseif (!isset($_SESSION['user']) || $_SESSION['tpu'] > 3)
+  header("Location: ../login.php");
 
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -28,8 +29,8 @@
   <!-- Nepcha Analytics (nepcha.com) -->
   <!-- Nepcha is a easy-to-use web analytics. No cookies and fully compliant with GDPR, CCPA and PECR. -->
   <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
-   <!-- Incluye jsPDF -->
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+  <!-- Incluye jsPDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
   <!-- Incluye jQuery para manejar las solicitudes AJAX -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
@@ -162,7 +163,8 @@
                 <div class="mb-2 col-12">
                   <div class="form-inline">
                     <select name="pedidos" id="pedidos" class="form-control border"> <!-- Opciones de pedidos despachados se llenarán dinámicamente --></select>
-                    <button type="button" id="selectpedidos" class="btn bg-gradient-info toast-btn">Seleccionar</button>
+                    <!-- HTML -->
+                    <button type="button" id="selectPedido" class="btn bg-gradient-info toast-btn">Seleccionar</button>
                   </div>
                 </div>
               </form>
@@ -170,7 +172,7 @@
           </div>
         </div>
       </div>
-            <!-- DETALLE DEL PEDIDO -->
+      <!-- DETALLE DEL PEDIDO -->
       <div class="row">
         <div class="col-12">
           <div class="card my-4">
