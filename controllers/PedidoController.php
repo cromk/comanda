@@ -22,6 +22,31 @@ try {
             else if (isset($_GET['productos'])) {// Si la solicitud es GET y se pasa un parámetro 'productos', obtendra todos los productos
                 $response = $productoModel->obtenerProductos();
             }
+            // Nueva funcionalidad: Obtener pedidos despachados o los detalles de un pedido específico
+            else if (isset($_GET['pedido'])) {
+                if (isset($_GET['id'])) {
+                    // Si se pasa un ID, obtener detalles del pedido específico
+                    $pedidoDetalles = $pedidoModel->detalle($_GET['id']);
+                    if ($pedidoDetalles) {
+                        $response = [
+                            'status' => 'success',
+                            'data' => [
+                                'id' => $_GET['id'],
+                                'lineas_pedido' => $pedidoDetalles
+                            ]
+                        ];
+                    } else {
+                        $response = [
+                            'status' => 'error',
+                            'message' => 'Detalles de pedido no encontrados.'
+                        ];
+                    }
+                } else {
+                    // Si no se pasa un ID, obtener todos los pedidos en estado 'Despachado'
+                    $pedidosDespachados = $pedidoModel->obtenerPedidosDespachados();
+                    $response = ['status' => 'success', 'data' => $pedidosDespachados];
+                }
+            }
             break;
         case 'POST':
             try {

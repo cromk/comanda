@@ -69,6 +69,15 @@ class Pedido {
         return false; // Retorna falso en caso de error
     }
 
+    public function obtenerPedidosDespachados() {
+        $query = "SELECT * FROM pedido WHERE estado = 'Despachado' ORDER BY fecha_pedido DESC";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    
+
     /*public function updateStatus($id, $estado)
     {
         $query = "UPDATE " . $this->table_name . " SET estado = :estado WHERE id_pedido = :id";

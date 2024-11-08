@@ -6,10 +6,10 @@
     header("Location: ../views/cocinero.php");
   elseif (!isset($_SESSION['user']) || $_SESSION['tpu'] > 3) 
     header("Location: ../login.php");
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -28,6 +28,10 @@
   <!-- Nepcha Analytics (nepcha.com) -->
   <!-- Nepcha is a easy-to-use web analytics. No cookies and fully compliant with GDPR, CCPA and PECR. -->
   <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
+   <!-- Incluye jsPDF -->
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+  <!-- Incluye jQuery para manejar las solicitudes AJAX -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body class="g-sidenav-show  bg-gray-200">
@@ -143,6 +147,7 @@
     <!-- End Navbar -->
 
     <div class="container-fluid py-4">
+      <!-- SELECCIÓN PEDIDO -->
       <div class="row mb-4">
         <div class="col-12">
           <div class="card my-4">
@@ -156,7 +161,7 @@
               <form role="form" class="margen-form" id="GuardarForm">
                 <div class="mb-2 col-12">
                   <div class="form-inline">
-                    <select name="pedidos" id="pedidos" class="form-control border"></select>
+                    <select name="pedidos" id="pedidos" class="form-control border"> <!-- Opciones de pedidos despachados se llenarán dinámicamente --></select>
                     <button type="button" id="selectpedidos" class="btn bg-gradient-info toast-btn">Seleccionar</button>
                   </div>
                 </div>
@@ -165,6 +170,7 @@
           </div>
         </div>
       </div>
+            <!-- DETALLE DEL PEDIDO -->
       <div class="row">
         <div class="col-12">
           <div class="card my-4">
@@ -187,16 +193,14 @@
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">PRODUCTO</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">CANTIDAD</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">PRECIO UNITARIO</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">VENTAS GRABADAS</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">FECHA</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">TOTAL</th>
                     </tr>
                   </thead>
-                  <tbody id="body-t"><!-- CARGA DE TABLA --></tbody>
+                  <tbody id="body-t"><!-- Los detalles del pedido se cargarán dinámicamente --></tbody>
                 </table>
               </div>
-              <div id="tdatos" class="d-grid gap-2 d-md-flex justify-content-md-end margen-form"></div>
-              <div id="fin" class="d-grid gap-2 d-md-flex justify-content-md-end margen-form">
-              <button type="button" id="selectPedido" class="btn bg-gradient-info toast-btn">Imprirmir</button>
+              <div class="d-grid gap-2 d-md-flex justify-content-md-end margen-form">
+                <button type="button" id="imprimirFactura" class="btn bg-gradient-info toast-btn">Imprimir Factura</button>
               </div>
             </div>
           </div>
@@ -222,6 +226,8 @@
   <script src="../js/plugins/perfect-scrollbar.min.js"></script>
   <script src="../js/plugins/smooth-scrollbar.min.js"></script>
   <script src="../js/plugins/chartjs.min.js"></script>
+  <script src="../"></script>
+  <script src="../js/factura.js"></script>
   <!-- Github buttons -->
   <script async defer src="https://buttons.github.io/buttons.js"></script>
   <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
