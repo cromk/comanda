@@ -69,7 +69,7 @@ $(document).ready(function() {
     tbody.append(`
       <tr>
         <td colspan="4" class="text-end font-weight-bold">Total Global:</td>
-        <td class="text-center font-weight-bold">${totalGlobal.toFixed(2)}</td>
+        <td class="text-center font-weight-bold">$ ${totalGlobal.toFixed(2)}</td>
       </tr>
     `);
     // Guardamos el total global en un atributo de datos para usarlo en el PDF
@@ -89,10 +89,13 @@ $(document).ready(function() {
 
     // Encabezado de la factura
     doc.setFontSize(16);
-    doc.text("Factura Restaurante Mar y Tierra", 105, 10, { align: "center" });
+    doc.text("Restaurante Mar y Tierra", 105, 10, { align: "center" });
     doc.setFontSize(12);
     doc.text(`ID Pedido: ${pedidoId}`, 10, 30);
-    doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 10, 40);
+    doc.text("\n\n Factura Comercial", 105, 10, { align: "center" });
+    const fecha = new Date();
+     const fechaFormateada = fecha.toISOString().split('T')[0];
+    doc.text(`Fecha: ${fechaFormateada}`, 10, 40);
 
     // Tabla de productos
     let yPosition = 50;
@@ -119,8 +122,19 @@ $(document).ready(function() {
     // Agregar total global al PDF
     const totalGlobalPDF = $('#body-t').data('total-global');
     yPosition += 10;
-    doc.text(`Total Global: ${totalGlobalPDF}`, 180, yPosition, { align: "right" });
+    doc.text(`Total Global: $ ${totalGlobalPDF}`, 180, yPosition, { align: "right" });
     // Descargar el PDF
     doc.save(`Factura_Pedido_${pedidoId}.pdf`);
+
+    $.ajax({
+      url: '../controllers/FacturaController.php',
+      type: 'POST',
+      data: {
+        id_pedido: pedidoId,
+        id_cajero: 6,
+        fecha_factura: fechaFormateada, 
+        total: totalGlobalPDF
+      }
+    })
   });
 });
