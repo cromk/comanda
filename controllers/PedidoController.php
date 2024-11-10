@@ -49,6 +49,15 @@ try {
             }
             break;
         case 'POST':
+            // Nueva funcionalidad para cambiar el estado del pedido a "Cancelado"
+            $data = json_decode(file_get_contents("php://input"), true);
+            if (isset($data['action']) && $data['action'] === 'cancel' && isset($data['id_pedido'])) {
+                $pedidoId = $data['id_pedido'];
+                $resultado = $pedidoModel->updateStatus($pedidoId, 'Cancelado');
+                $response = $resultado ? ['status' => 'success'] : ['status' => 'error', 'message' => 'No se pudo cambiar el estado del pedido'];
+                echo json_encode($response);
+                exit; // Terminar aquí para evitar continuar con el resto del código en este caso
+            } 
             try {
                 // Decodifica el cuerpo de la solicitud JSON en un array asociativo
                 $data = json_decode(file_get_contents("php://input"), true);

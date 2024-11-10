@@ -25,7 +25,7 @@ $(document).ready(function() {
      * Actualiza el contenido del elemento select con id 'mesas'.
      */
     function cargarMesasDisponibles(){
-        console.log("CARGHANDO MESAS");
+        console.log("CARGANDO MESAS");
         $.ajax({// Realiza una solicitud AJAX para obtener las mesas disponibles
             url: '../controllers/PedidoController.php?mesa=true',
             type: 'GET',
@@ -170,7 +170,7 @@ $(document).ready(function() {
         console.log(data);
         // Realizar la solicitud AJAX para crear el pedido
         $.ajax({
-            url: '../controllers/PedidoController.php', // Cambia esto a la URL correcta si es necesario
+            url: '../controllers/PedidoController.php', 
             type: 'POST',
             contentType: 'application/json',
             data: data,
