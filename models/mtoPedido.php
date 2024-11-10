@@ -83,16 +83,13 @@ class Pedido {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-
-    
-
-    /*public function updateStatus($id, $estado)
+    public function updateStatus($id, $estado)
     {
         $query = "UPDATE " . $this->table_name . " SET estado = :estado WHERE id_pedido = :id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':id', $id);
         $stmt->bindParam(':estado', $estado);
         return $stmt->execute();
-    }*/
+    }
 }
 ?>

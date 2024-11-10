@@ -125,7 +125,7 @@ $(document).ready(function() {
     doc.text(`Total Global: $ ${totalGlobalPDF}`, 180, yPosition, { align: "right" });
     // Descargar el PDF
     doc.save(`Factura_Pedido_${pedidoId}.pdf`);
-
+// Guardar factura y cambiar estado a Cancelado
     $.ajax({
       url: '../controllers/FacturaController.php',
       type: 'POST',
@@ -134,7 +134,31 @@ $(document).ready(function() {
         id_cajero: 6,
         fecha_factura: fechaFormateada, 
         total: totalGlobalPDF
+      },
+      success: function() {
+        // Si la factura se guarda correctamente, cambiamos el estado del pedido a "Cancelado"
+        $.ajax({
+          url: '../controllers/PedidoController.php',
+          type: 'POST',
+          data: JSON.stringify({ action: 'cancel', id_pedido: pedidoId }),
+          contentType: 'application/json',
+          success: function(response) {
+            if (response.status === 'success') {
+              $('#pedidos option:selected').remove(); // Eliminar de la lista de selección
+              $('#body-t').empty(); // Vaciar la tabla de detalles
+              alert("Pedido facturado y marcado como cancelado con éxito.");
+            } else {
+              alert("Error al cambiar el estado del pedido a cancelado.");
+            }
+          },
+          error: function() {
+            alert("Error en la solicitud para cambiar el estado del pedido.");
+          }
+        });
+      },
+      error: function() {
+        alert("Error al guardar la factura en el sistema.");
       }
-    })
+    });
   });
 });
