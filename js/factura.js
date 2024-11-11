@@ -136,7 +136,7 @@ $(document).ready(function() {
         total: totalGlobalPDF
       },
       success: function() {
-        // Si la factura se guarda correctamente, cambiamos el estado del pedido a "Cancelado"
+        // Si la factura se guarda correctamente, cambiamos el estado del pedido a "Finalizado"
         $.ajax({
           url: '../controllers/PedidoController.php',
           type: 'POST',
@@ -146,9 +146,9 @@ $(document).ready(function() {
             if (response.status === 'success') {
               $('#pedidos option:selected').remove(); // Eliminar de la lista de selección
               $('#body-t').empty(); // Vaciar la tabla de detalles
-              alert("Pedido facturado y marcado como cancelado con éxito.");
+              alert("Pedido facturado y marcado como Finalizado con éxito.");
             } else {
-              alert("Error al cambiar el estado del pedido a cancelado.");
+              alert("Error al cambiar el estado del pedido a Finalizado.");
             }
           },
           error: function() {

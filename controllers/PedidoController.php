@@ -49,11 +49,11 @@ try {
             }
             break;
         case 'POST':
-            // Nueva funcionalidad para cambiar el estado del pedido a "Cancelado"
+            // Nueva funcionalidad para cambiar el estado del pedido a " Finalizado"
             $data = json_decode(file_get_contents("php://input"), true);
             if (isset($data['action']) && $data['action'] === 'cancel' && isset($data['id_pedido'])) {
                 $pedidoId = $data['id_pedido'];
-                $resultado = $pedidoModel->updateStatus($pedidoId, 'Cancelado');
+                $resultado = $pedidoModel->updateStatus($pedidoId, 'Finalizado');
                 $response = $resultado ? ['status' => 'success'] : ['status' => 'error', 'message' => 'No se pudo cambiar el estado del pedido'];
                 echo json_encode($response);
                 exit; // Terminar aquí para evitar continuar con el resto del código en este caso
