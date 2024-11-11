@@ -125,13 +125,16 @@ $(document).ready(function() {
     doc.text(`Total Global: $ ${totalGlobalPDF}`, 180, yPosition, { align: "right" });
     // Descargar el PDF
     doc.save(`Factura_Pedido_${pedidoId}.pdf`);
-// Guardar factura y cambiar estado a Cancelado
+
+    const id_mesero = $('#id_mesero').val();
+
+    // Guardar factura y cambiar estado a Cancelado
     $.ajax({
       url: '../controllers/FacturaController.php',
       type: 'POST',
       data: {
         id_pedido: pedidoId,
-        id_cajero: 6,
+        id_mesero: id_mesero,
         fecha_factura: fechaFormateada, 
         total: totalGlobalPDF
       },
@@ -146,7 +149,7 @@ $(document).ready(function() {
             if (response.status === 'success') {
               $('#pedidos option:selected').remove(); // Eliminar de la lista de selección
               $('#body-t').empty(); // Vaciar la tabla de detalles
-              alert("Pedido facturado y marcado como Finalizado con éxito.");
+              alert("Pedido facturado y marcado como finalizado con éxito.");
             } else {
               alert("Error al cambiar el estado del pedido a Finalizado.");
             }

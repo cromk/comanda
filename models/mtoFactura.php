@@ -12,13 +12,13 @@ class Factura {
     }
 
     // Función para agregar factura
-    public function addFactura($id_pedido, $id_cajero, $fecha_factura, $total) {
-        $query = "INSERT INTO " . $this->table_name . " (id_pedido, id_cajero, fecha_factura, total) VALUES (:id_pedido, :id_cajero, :fecha_factura, :total)";
+    public function addFactura($id_pedido, $id_mesero, $fecha_factura, $total) {
+        $query = "INSERT INTO " . $this->table_name . " (id_pedido, id_mesero, fecha_factura, total) VALUES (:id_pedido, :id_mesero, :fecha_factura, :total)";
         $stmt = $this->conn->prepare($query);
 
         // Bind de los parámetros
         $stmt->bindParam(':id_pedido', $id_pedido);
-        $stmt->bindParam(':id_cajero', $id_cajero);
+        $stmt->bindParam(':id_mesero', $id_mesero);
         $stmt->bindParam(':fecha_factura', $fecha_factura);
         $stmt->bindParam(':total', $total);
 

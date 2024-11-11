@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $success = $factura->addFactura(
         $_POST['id_pedido'],
-        $_POST['id_cajero'],
+        $_POST['id_mesero'],
         $_POST['fecha_factura'],
         $_POST['total']
     );
