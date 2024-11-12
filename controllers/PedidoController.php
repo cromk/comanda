@@ -22,8 +22,42 @@ try {
             else if (isset($_GET['productos'])) {// Si la solicitud es GET y se pasa un parámetro 'productos', obtendra todos los productos
                 $response = $productoModel->obtenerProductos();
             }
+            // Nueva funcionalidad: Obtener pedidos despachados o los detalles de un pedido específico
+            else if (isset($_GET['pedido'])) {
+                if (isset($_GET['id'])) {
+                    // Si se pasa un ID, obtener detalles del pedido específico
+                    $pedidoDetalles = $pedidoModel->detallef($_GET['id']);
+                    if ($pedidoDetalles) {
+                        $response = [
+                            'status' => 'success',
+                            'data' => [
+                                'id' => $_GET['id'],
+                                'lineas_pedido' => $pedidoDetalles
+                            ]
+                        ];
+                    } else {
+                        $response = [
+                            'status' => 'error',
+                            'message' => 'Detalles de pedido no encontrados.'
+                        ];
+                    }
+                } else {
+                    // Si no se pasa un ID, obtener todos los pedidos en estado 'Despachado'
+                    $pedidosDespachados = $pedidoModel->obtenerPedidosDespachados();
+                    $response = ['status' => 'success', 'data' => $pedidosDespachados];
+                }
+            }
             break;
         case 'POST':
+            // Nueva funcionalidad para cambiar el estado del pedido a " Finalizado"
+            $data = json_decode(file_get_contents("php://input"), true);
+            if (isset($data['action']) && $data['action'] === 'cancel' && isset($data['id_pedido'])) {
+                $pedidoId = $data['id_pedido'];
+                $resultado = $pedidoModel->updateStatus($pedidoId, 'Finalizado');
+                $response = $resultado ? ['status' => 'success'] : ['status' => 'error', 'message' => 'No se pudo cambiar el estado del pedido'];
+                echo json_encode($response);
+                exit; // Terminar aquí para evitar continuar con el resto del código en este caso
+            } 
             try {
                 // Decodifica el cuerpo de la solicitud JSON en un array asociativo
                 $data = json_decode(file_get_contents("php://input"), true);

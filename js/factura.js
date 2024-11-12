@@ -1,159 +1,164 @@
 $(document).ready(function() {
-    //Variable que contrala el numero de pedido seleccionado
-    var pedido = null;
-    var id_cajero = null;
+  // Cargar pedidos despachados al cargar la página
+  cargarPedidosDespachados();
 
-    // VARIABLE ASIGNADA PARA EL PEDIDO COMO OBJETO
-    const pedido = {
-        estado: "Despachado",
-        num_pedido: null,
-        id_cajero: null,
-        lineas_pedido: [],
-    }
-
-    // Mostrar mensajes en el alert
-    function showMessage(type, message) {
-        //Aperturamos el elemento html y agregamos el mensaje
-        $('.mensaje').html(
-            '<div class="alert alert-' + type + ' alert-dismissible text-white fade show" role="alert"><span class="text-sm">'
-            + message +'<button type="button" class="btn-close text-lg py-3 opacity-10" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>'
-        );
-    }
-
-    /**
-     * Carga los pedidos despachados mediante una solicitud AJAX al servidor.
-     * Actualiza el contenido del elemento select con id 'pedidos'.
-     */
-    function cargarPedidosDespachados(){
-        console.log("CARGHANDO PEDIDOS");
-        $.ajax({// Realiza una solicitud AJAX para obtener los pedidos despachados
-            url: '../controllers/PedidoController.php?pedido=true',
-            type: 'GET',
-            success: function(response) {
-                console.log(response);
-                var select = $('#pedidos');
-                select.empty(); // Limpia el select antes de agregar nuevas opciones
-                if(response.length===0)
-                    select.append('<option>Sin pedidos despachados</option>');
-                else {
-                    response.forEach(function(pedido) {
-                        select.append('<option value="' + pedido.id_pedido + '">Num.pedido: ' + pedido.id_pedido + ' &emsp;|&emsp;Num.Mesa: '+ pedido.num_mesa  + '</option>');
-                    });
-                }
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.log(errorThrown);
-                showMessage('danger', "Error al cargar Pedido: " + textStatus + " - " + errorThrown);
-            }
-        });
-    }
-
-    cargarPedidosDespachados();// Carga los pedidos despachados al inicializar la página
-
-     // Maneja el evento click en el botón de selección de pedido
-    $('#selectPedido').click(function() {
-        pedido = $('#pedidos').val();// Obtiene el valor del pedido seleccionado
-        id_cajero = $('#id_cajero').val(); //Obtiene el codigo del cajero
-        var data = { id_pedido : pedido };// Datos para la solicitud
-        $.ajax({// Realiza una solicitud AJAX para mostrar el pedido 
-            url: '../controllers/PedidoController.php',
-            type: 'PUT',
-            contentType: 'application/json',
-            data: JSON.stringify(data),
-            success: function(response) {
-                cargarPedidosDespachados();// Recarga los pedidos despachados
-                $('#selectPedido').prop('disabled', true);//Desabilita el boton de seleccionar pedido
-                //Se agrega el boton para cambiar pedido
-                $('#btns').append('<button type="button" id="changePedido" class="btn bg-gradient-warning toast-btn">CAMBIAR DE PEDIDO</button>');
-                $('#tdatos').empty();//Se limpia la tabla de productos
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                showMessage('danger', "Error en la solicitud: " + textStatus + " - " + errorThrown);
-            }
-        });
-    });
-
-    // Maneja el evento click en el botón de cambio de pedido
-    $(document).on('click', '#changePedido', function() {
-        var data = { id_pedido : pedido}; // Datos para la solicitud
-        $.ajax({
-            url: '../controllers/PedidoController.php',
-            type: 'PUT',
-            contentType: 'application/json',
-            data: JSON.stringify(data),
-            success: function(response) {
-                cargarPedidosDespachados();// Recarga los pedidos despachados
-                $('#selectPedido').prop('disabled', false);// Habilita el botón de selección de pedido
-                $('#fin').empty();//Elimina los elementos agregados en el div fin
-                $('#btns').empty();//Elimina los botones agregados en el div btns
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                showMessage('danger', "Error en la solicitud: " + textStatus + " - " + errorThrown);
-            }
-        });
-    });
-
-
-    $(document).on('click', '#imprimirFactura', () => {
-        pedido.num_pedido = pedido;
-        pedido.id_cajero = id_cajero;
-        pedido.lineas_pedido = []; // Inicializa el array para evitar acumulaciones
-    
-        $('#body-t tr').each(function() {
-            var id_item = $(this).find('td:eq(0)').text();
-            var cantidad = $(this).find('.cantidad-input').val(); // Obtener la cantidad del input
-            var precio_unitario = $(this).find('td:eq(3)').text();
-        
-            // Agregar los datos al array de objetos
-            pedido.lineas_pedido.push({
-                id_pedido: null,  // Este valor se asignará al imprimir la factura
-                id_item: id_item,
-                cantidad: cantidad,
-                precio_unitario: precio_unitario
-            });
-        });
-    
-        console.log(pedido); // Para verificar los datos antes de enviar
-        const data = JSON.stringify(pedido)
-        console.log(data);
-        // Realizar la solicitud AJAX para crear el pedido
-        $.ajax({
-            url: '../controllers/PedidoController.php', // Cambia esto a la URL correcta si es necesario
-            type: 'POST',
-            contentType: 'application/json',
-            data: data,
-            success: function(response) {
-                if (response.status === 'success') {
-                    $('#body-t').empty();//Se limpia la tabla de productos
-                    $('#selectPedido').prop('disabled', false);//Desabilita el boton de seleccionar pedido
-                    $('#fin').empty();//Elimina los elementos agregados en el div fin
-                    $('#btns').empty();//Elimina los botones agregados en el div btns
-                    showMessage('success','Pedido Impreso con exito');
-                    cargarPedidosDespachados();
-                } else {
-                    // Manejar el error
-                    showMessage('warning', "Error al cargar productos: " + response.message);
-                }
-            },
-            error: function(xhr, status, error) {
-                // Manejar errores de la solicitud AJAX
-                console.error('AJAX error:', status, error);
-                console.log('AJAX error:'+ "ESTATUS:"+ status + "ERROR" + error);
-                console.log(xhr);
-                showMessage('danger', "Error al imprimir factura: " + textStatus + " - " + errorThrown);
-            }
-        });
-    });
-    
-    
-
-    // Inicializar DataTable para productos
-    $('#productTable').DataTable({
-        "language": {// Configura el lenguaje de la DataTable en español
-            "url": "https://cdn.datatables.net/plug-ins/1.11.3/i18n/es_es.json"
+  // Función para cargar pedidos despachados
+  function cargarPedidosDespachados() {
+    $.ajax({
+      url: '../controllers/PedidoController.php?pedido=true',
+      type: 'GET',
+      success: function(response) {
+        if (response.status === 'success') {
+          const select = $('#pedidos');
+          select.empty();
+          response.data.forEach(pedido => {
+            select.append(`<option value="${pedido.id_pedido}">Pedido: ${pedido.id_pedido} | Mesa: ${pedido.num_mesa}</option>`);
+          });
+        } else {
+          alert("No se encontraron pedidos despachados.");
         }
+      },
+      error: function() {
+        alert("Error al cargar los pedidos despachados.");
+      }
     });
+  }
 
+  // Obtener detalles del pedido seleccionado
+  $('#selectPedido').click(function() {
+    const pedidoId = $('#pedidos').val();
+    if (!pedidoId) {
+      alert("Por favor, selecciona un pedido despachado.");
+      return;
+    }
+    $.ajax({
+      url: `../controllers/PedidoController.php?pedido=true&id=${pedidoId}`,
+      type: 'GET',
+      success: function(response) {
+        if (response.status === 'success') {
+          mostrarDetallesPedido(response.data);
+        } else {
+          alert("Error al obtener los detalles del pedido.");
+        }
+      },
+      error: function() {
+        alert("Error en la solicitud para obtener el pedido.");
+      }
+    });
+  });
 
+  // Función para mostrar detalles del pedido en la tabla
+  function mostrarDetallesPedido(data) {
+    const tbody = $('#body-t');
+    tbody.empty();
+    let totalGlobal = 0; // Inicializamos el total global
+    data.lineas_pedido.forEach((item, index) => {
+      const totalLinea = item.cantidad * item.precio_unitario;
+      totalGlobal += totalLinea; // Sumamos el total de cada línea al total global
+      tbody.append(`
+        <tr>
+          <td class="text-center">${index + 1}</td>
+          <td>${item.nombre}</td>
+          <td class="text-center">${item.cantidad}</td>
+          <td class="text-center">${item.precio_unitario}</td>
+          <td class="text-center">${totalLinea.toFixed(2)}</td>
+        </tr>
+      `);
+    });
+    // Agregamos una fila para mostrar el total global en la tabla
+    tbody.append(`
+      <tr>
+        <td colspan="4" class="text-end font-weight-bold">Total Global:</td>
+        <td class="text-center font-weight-bold">$ ${totalGlobal.toFixed(2)}</td>
+      </tr>
+    `);
+    // Guardamos el total global en un atributo de datos para usarlo en el PDF
+    $('#body-t').data('total-global', totalGlobal.toFixed(2));
+  }
 
+  // Generar y descargar la factura en PDF
+  $('#imprimirFactura').click(function() {
+    const pedidoId = $('#pedidos').val();
+    if (!pedidoId) {
+      alert("Por favor, selecciona un pedido antes de imprimir.");
+      return;
+    }
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    // Encabezado de la factura
+    doc.setFontSize(16);
+    doc.text("Restaurante Mar y Tierra", 105, 10, { align: "center" });
+    doc.setFontSize(12);
+    doc.text(`ID Pedido: ${pedidoId}`, 10, 30);
+    doc.text("\n\n Factura Comercial", 105, 10, { align: "center" });
+    const fecha = new Date();
+     const fechaFormateada = fecha.toISOString().split('T')[0];
+    doc.text(`Fecha: ${fechaFormateada}`, 10, 40);
+
+    // Tabla de productos
+    let yPosition = 50;
+    doc.text("Producto", 10, yPosition);
+    doc.text("Cantidad", 80, yPosition);
+    doc.text("Precio Unitario", 130, yPosition);
+    doc.text("Total", 180, yPosition);
+    yPosition += 10;
+    
+
+    $('#body-t tr').each(function() {
+      const nombre = $(this).find('td:eq(1)').text();
+      const cantidad = $(this).find('td:eq(2)').text();
+      const precioUnitario = $(this).find('td:eq(3)').text();
+      const total = $(this).find('td:eq(4)').text();
+
+      doc.text(nombre, 10, yPosition);
+      doc.text(cantidad, 80, yPosition);
+      doc.text(precioUnitario, 130, yPosition);
+      doc.text(total, 180, yPosition);
+      yPosition += 10;
+      
+    });
+    // Agregar total global al PDF
+    const totalGlobalPDF = $('#body-t').data('total-global');
+    yPosition += 10;
+    doc.text(`Total Global: $ ${totalGlobalPDF}`, 180, yPosition, { align: "right" });
+    // Descargar el PDF
+    doc.save(`Factura_Pedido_${pedidoId}.pdf`);
+// Guardar factura y cambiar estado a Cancelado
+    $.ajax({
+      url: '../controllers/FacturaController.php',
+      type: 'POST',
+      data: {
+        id_pedido: pedidoId,
+        id_cajero: 6,
+        fecha_factura: fechaFormateada, 
+        total: totalGlobalPDF
+      },
+      success: function() {
+        // Si la factura se guarda correctamente, cambiamos el estado del pedido a "Finalizado"
+        $.ajax({
+          url: '../controllers/PedidoController.php',
+          type: 'POST',
+          data: JSON.stringify({ action: 'cancel', id_pedido: pedidoId }),
+          contentType: 'application/json',
+          success: function(response) {
+            if (response.status === 'success') {
+              $('#pedidos option:selected').remove(); // Eliminar de la lista de selección
+              $('#body-t').empty(); // Vaciar la tabla de detalles
+              alert("Pedido facturado y marcado como Finalizado con éxito.");
+            } else {
+              alert("Error al cambiar el estado del pedido a Finalizado.");
+            }
+          },
+          error: function() {
+            alert("Error en la solicitud para cambiar el estado del pedido.");
+          }
+        });
+      },
+      error: function() {
+        alert("Error al guardar la factura en el sistema.");
+      }
+    });
+  });
 });
