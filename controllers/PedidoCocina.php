@@ -17,28 +17,27 @@ $method = $_SERVER['REQUEST_METHOD'];
 try {
 
     $pedidoModel = new Pedido();
+    $data = null;
 
     switch ($method) {
         case 'GET':
             // Si la solicitud es GET y se pasa un parámetro 'id_pedido', obtiene un pedido específico
             if (isset($_GET['id_pedido'])) {
                 $response = $pedidoModel->detalle($_GET['id_pedido']);
-            } else {
+            }else if(isset($_GET['estado'])){
+                $response = $pedidoModel->readStatus();
+            }else {
                 $response = $pedidoModel->readAll();
             }
             break;
 
         case 'PUT':
-            //$data = json_decode(file_get_contents("php://input"), true);
-            // Verifica que se haya pasado los campos
-            //if (!isset($data['id_pedido']) || $data['estado']) {
-                // Si no, lanza una excepción indicando datos incompletos
-                //throw new Exception('Datos incompletos');
-            //}
-            // Llama al método update del modelo para actualizar el estado de un pedido
-            //$pedidoModel->updateStatus($data['id_pedido'],$data['estado']);
-            // Establece la respuesta indicando éxito
-            //$response = ['status' => 'success', 'message' => 'Estado del pedido actualizado'];
+            $data = json_decode(file_get_contents("php://input"), true);
+            if (!isset($data['id']) || !isset($data['estado'])) {
+                throw new Exception('Datos incompletos');
+            }
+            $pedidoModel->updateStatus($data['id'], $data['estado']);
+            $response = ['status' => 'success', 'message' => 'Estado actualizado'];
             break;
 
         default:

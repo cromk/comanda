@@ -20,6 +20,14 @@ class Pedido {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    //Funcion que muestra todos los registros de la tabla
+    public function readStatus() {
+        $query = "SELECT * FROM " . $this->table_name . " ORDER BY fecha_pedido DESC";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function read($id) {
         $query = "SELECT * FROM " . $this->table_name . " WHERE estado = 'Nuevo' AND id_pedido = ". $id ." ORDER BY fecha_pedido DESC";
         $stmt = $this->conn->prepare($query);
@@ -29,6 +37,7 @@ class Pedido {
 
     public function detalle($id) {
         $query = "SELECT m.nombre AS nombre, pd.cantidad AS cantidad FROM pedido p, pedidodetalle pd, menuitem m WHERE p.id_pedido = pd.id_pedido AND pd.id_item = m.id_item AND p.id_pedido = " .$id;
+        error_log('EL QUERI ES: ' . $query);
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -67,6 +76,15 @@ class Pedido {
             return true; // Retorna verdadero si se agrega correctamente
         }
         return false; // Retorna falso en caso de error
+    }
+
+    public function updateStatus($id, $estado){
+        error_log("entra");
+        $query = "UPDATE " . $this->table_name . " SET estado = :estado WHERE id_pedido = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':estado', $estado);
+        return $stmt->execute();
     }
 
     /*public function updateStatus($id, $estado)

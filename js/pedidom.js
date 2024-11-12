@@ -25,7 +25,6 @@ $(document).ready(function() {
      * Actualiza el contenido del elemento select con id 'mesas'.
      */
     function cargarMesasDisponibles(){
-        console.log("CARGHANDO MESAS");
         $.ajax({// Realiza una solicitud AJAX para obtener las mesas disponibles
             url: '../controllers/PedidoController.php?mesa=true',
             type: 'GET',
@@ -33,8 +32,10 @@ $(document).ready(function() {
                 console.log(response);
                 var select = $('#mesas');
                 select.empty(); // Limpia el select antes de agregar nuevas opciones
-                if(response.length===0)
+                if(response.length===0){
                     select.append('<option>Sin mesas disponibles</option>');
+                     $('#selectMesa').prop('disabled', true);
+                }
                 else {
                     response.forEach(function(mesa) {
                         select.append('<option value="' + mesa.num_mesa + '">Num. Mesa: ' + mesa.num_mesa + '&emsp;|&emsp;Máx. Personas: ' + mesa.cant_personas + '</option>');
@@ -165,7 +166,6 @@ $(document).ready(function() {
             });
         });
     
-        console.log(pedido); // Para verificar los datos antes de enviar
         const data = JSON.stringify(pedido)
         console.log(data);
         // Realizar la solicitud AJAX para crear el pedido

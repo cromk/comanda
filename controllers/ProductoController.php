@@ -21,6 +21,7 @@ if ($method == 'POST' && isset($_POST['_method']) && $_POST['_method'] == 'PUT')
 try {
     // Crea una instancia del modelo de 'Producto'
     $productoModel = new Producto();
+    $fotoPath = null;
 
     // Verifica el método HTTP de la solicitud y actúa en consecuencia
     switch ($method) {
@@ -33,7 +34,7 @@ try {
                 $response = $productoModel->read($_GET['id']);
             } else {
                 // Si no se pasa ningún parámetro, lee todos los productos
-                $response = $productoModel->readAll();
+                $response = $productoModel->readAvailable();
             }
             break;
 
@@ -48,7 +49,7 @@ try {
                 $foto = $_FILES['foto'];
 
                 // Verifica que todos los datos requeridos estén presentes
-                if (!isset($nombre) || !isset($descripcion) || !isset($precio) || !isset($id_categoria) || !isset($foto)) {
+                if (!isset($nombre) || !isset($descripcion) || !isset($precio) || !isset($id_categoria) || !isset($foto) || !isset($estado)) {
                     throw new Exception('Datos incompletos al guardar');
                 }
 
@@ -83,9 +84,10 @@ try {
                 $precio = $_POST['precio'];
                 $id_categoria = $_POST['id_categoria'];
                 $foto_actual = $_POST['foto_actual'];
+                $estado = $_POST['estado'];
 
                 // Verifica que todos los datos requeridos estén presentes
-                if (!isset($id) || !isset($nombre) || !isset($descripcion) || !isset($precio) || !isset($id_categoria)) {
+                if (!isset($id) || !isset($nombre) || !isset($descripcion) || !isset($precio) || !isset($id_categoria) || !isset($estado)) {
                     throw new Exception('Datos incompletos del update');
                 }
 
@@ -95,6 +97,12 @@ try {
                     $foto = $_FILES['foto'];
                     $extension = pathinfo($foto['name'], PATHINFO_EXTENSION);
                     $fotoPath = '../img/products/' . $nombre . '.' . $extension;
+
+                    // Elimina la imagen anterior si existe
+                    if (file_exists($foto_actual)) {
+                        unlink($foto_actual);
+                    }
+
                     if (!move_uploaded_file($foto['tmp_name'], $fotoPath)) {
                         throw new Exception('Error al subir la imagen');
                     }

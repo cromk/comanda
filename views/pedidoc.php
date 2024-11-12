@@ -17,23 +17,28 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Tablero de pedidos | Mar y Tierra</title>
+  <!--     Fonts and icons     -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.bootstrap5.css">
   <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900|Roboto+Slab:400,700" />
+  <!-- Nucleo Icons -->
   <link href="../css/nucleo-icons.css" rel="stylesheet" />
   <link href="../css/nucleo-svg.css" rel="stylesheet" />
+  <!-- Font Awesome Icons -->
   <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+  <!-- Material Icons -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
-  <link id="pagestyle" href="../css/material-dashboard.css" rel="stylesheet" />
+  <!-- CSS Files -->
+    <!-- Nepcha Analytics (nepcha.com) -->
+  <!-- Nepcha is a easy-to-use web analytics. No cookies and fully compliant with GDPR, CCPA and PECR. -->
   <script defer src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
-  <!-- jQuery -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <!-- Bootstrap JS -->
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-  <!-- Custom JS -->
-  <script> var horaServidor = "<?php echo $hora_servidor; ?>"; </script>
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
   <link id="pagestyle" href="../css/material-dashboard.css" rel="stylesheet" />
+  <title>Tablero de pedidos | Mar y Tierra</title>
+  <script> var horaServidor = "<?php echo $hora_servidor; ?>"; </script>
 </head>
 
 <body class="g-sidenav-show  bg-gray-200">
@@ -42,7 +47,7 @@
       <i class="fas fa-times p-3 cursor-pointer text-white opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
       <a class="navbar-brand m-0" href=" cocinero.php">
         <img src="../img/2.png" class="navbar-brand-img h-100" alt="main_logo">
-        <span class="ms-1 font-weight-bold text-white">Dashboard Cocinero</span>
+        <span class="ms-1 font-weight-bold text-white">Perfil Cocinero</span>
       </a>
     </div>
     <hr class="horizontal light mt-0 mb-2">
@@ -53,7 +58,7 @@
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
               <i class="material-icons opacity-10">dashboard</i>
             </div>
-            <span class="nav-link-text ms-1">Dashboard</span>
+            <span class="nav-link-text ms-1">Inicio</span>
           </a>
         </li>
         <li class="nav-item mt-3">
@@ -153,6 +158,7 @@
     </div>
   </main>
   <!-- Modal de Productos -->
+  <!-- Modal de Productos -->
   <div class="modal fade" id="detalleModal" tabindex="-1" aria-labelledby="detalleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
@@ -168,14 +174,12 @@
                 <th>Cantidad</th>
               </tr>
             </thead>
-            <tbody> <!-- Cargar productos vía AJAX --></tbody>
+            <tbody> <!-- Cargar productos vía AJAX --> </tbody>
           </table>
         </div>
       </div>
     </div>
   </div>
-  <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
-  <!-- Core JS Files -->
   <script src="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css"></script>
   <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
   <script src="https://cdn.datatables.net/2.0.8/js/dataTables.bootstrap5.js"></script>

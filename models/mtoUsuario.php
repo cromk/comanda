@@ -34,19 +34,20 @@ class Usuario {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function create($nombre_usuario, $apellido_usuario, $mail, $password, $id_tipo_usuario) {
-        $query = "INSERT INTO " . $this->table_name . " (nombre_usuario, apellido_usuario, mail, password, id_tipo_usuario) VALUES (:nombre_usuario, :apellido_usuario, :mail, :password, :id_tipo_usuario)";
+    public function create($nombre_usuario, $apellido_usuario, $mail, $password, $id_tipo_usuario, $estado_usuario) {
+        $query = "INSERT INTO " . $this->table_name . " (nombre_usuario, apellido_usuario, mail, password, id_tipo_usuario, estado_usuario) VALUES (:nombre_usuario, :apellido_usuario, :mail, :password, :id_tipo_usuario)";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':nombre_usuario', $nombre_usuario);
         $stmt->bindParam(':apellido_usuario', $apellido_usuario);
         $stmt->bindParam(':mail', $mail);
         $stmt->bindParam(':password', $password);
         $stmt->bindParam(':id_tipo_usuario', $id_tipo_usuario);
+        $stmt->bindParam(':estado_usuario',$estado_usuario);
         $stmt->execute();
     }
 
-    public function update($id, $nombre_usuario, $apellido_usuario, $mail, $password, $id_tipo_usuario) {
-        $query = "UPDATE " . $this->table_name . " SET nombre_usuario = :nombre_usuario, apellido_usuario = :apellido_usuario, mail = :mail, password = :password, id_tipo_usuario = :id_tipo_usuario WHERE id_usuario = :id";
+    public function update($id, $nombre_usuario, $apellido_usuario, $mail, $password, $id_tipo_usuario, $estado_usuario) {
+        $query = "UPDATE " . $this->table_name . " SET nombre_usuario = :nombre_usuario, apellido_usuario = :apellido_usuario, mail = :mail, password = :password, id_tipo_usuario = :id_tipo_usuario, estado_usuario = :estado_usuario  WHERE id_usuario = :id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':id', $id);
         $stmt->bindParam(':nombre_usuario', $nombre_usuario);
@@ -54,6 +55,7 @@ class Usuario {
         $stmt->bindParam(':mail', $mail);
         $stmt->bindParam(':password', $password);
         $stmt->bindParam(':id_tipo_usuario', $id_tipo_usuario);
+        $stmt->bindParam(':estado_usuario',$estado_usuario);
         $stmt->execute();
     }
 
@@ -64,11 +66,11 @@ class Usuario {
         $stmt->execute();
     }
 
-    public function deshabilitar($id,$estado){
-        $query = "UPDATE " . $this->table_name . " SET estado_usuario = :estado WHERE id_usuario = :id";
+    public function updateStatus($id,$estado_usuario){
+        $query = "UPDATE " . $this->table_name . " SET estado_usuario = :estado_usuario WHERE id_usuario = :id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':id', $id);
-        $stmt->bindParam(':estado', $estado);
+        $stmt->bindParam(':estado_usuario', $estado_usuario);
         $stmt->execute();
     }
 

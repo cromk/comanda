@@ -25,30 +25,32 @@ try {
             // Decodifica el cuerpo de la solicitud JSON en un array asociativo
             $data = json_decode(file_get_contents("php://input"), true);
             // Verifica que se haya pasado los campos requeridos
-            if (!isset($data['nombre_usuario']) || !isset($data['apellido_usuario']) || !isset($data['mail']) || !isset($data['password']) || !isset($data['id_tipo_usuario'])) {
+            if (!isset($data['nombre_usuario']) || !isset($data['apellido_usuario']) || !isset($data['mail']) || !isset($data['password']) || !isset($data['id_tipo_usuario']) || !isset($data['estado_usuario'])) {
                 throw new Exception('Datos incompletos');// Si no, lanza una excepción indicando datos incompletos
             }
             // Llama al método create del modelo para crear un nuevo Usuario
-            $usuarioModel->create($data['nombre_usuario'], $data['apellido_usuario'], $data['mail'], $data['password'], $data['id_tipo_usuario']);
+            $usuarioModel->create($data['nombre_usuario'], $data['apellido_usuario'], $data['mail'], $data['password'], $data['id_tipo_usuario'],$data['estado_usuario']);
             $response = ['status' => 'success', 'message' => 'Usuario creado con éxito'];
             break;
 
         case 'PUT':
             $data = json_decode(file_get_contents("php://input"), true);
-            if (!isset($data['id']) || !isset($data['nombre_usuario']) || !isset($data['apellido_usuario']) || !isset($data['mail']) || !isset($data['password']) || !isset($data['id_tipo_usuario'])) {
+            if (!isset($data['id']) || !isset($data['nombre_usuario']) || !isset($data['apellido_usuario']) || !isset($data['mail']) || !isset($data['password']) || !isset($data['id_tipo_usuario']) || !isset($data['estado_usuario'])) {
                 throw new Exception('Datos incompletos');// Si no, lanza una excepción indicando datos incompletos
             }
-            $usuarioModel->update($data['id'], $data['nombre_usuario'], $data['apellido_usuario'], $data['mail'], $data['password'], $data['id_tipo_usuario']);
+            $usuarioModel->update($data['id'], $data['nombre_usuario'], $data['apellido_usuario'], $data['mail'], $data['password'], $data['id_tipo_usuario'], $data['estado_usuario']);
             $response = ['status' => 'success', 'message' => 'Usuario actualizado con éxito'];
             break;
 
         case 'DELETE':
+            $MSJ = ''; 
             $data = json_decode(file_get_contents("php://input"), true);
             if (!isset($data['id']) || !isset($data['estado_usuario'])) {
                 throw new Exception('Datos incompletos');// Si no, lanza una excepción indicando datos incompletos
             }
-            $usuarioModel->deshabilitar($data['id'],$data['estado_usuario']);
-            $response = ['status' => 'success', 'message' => 'Usuario deshabilitado con éxito'];
+            $usuarioModel->updateStatus($data['id'],$data['estado_usuario']);
+            if($data['estado_usuario']==='H') $MSJ = 'habilitado'; else $MSJ = 'deshabilitado';
+            $response = ['status' => 'success', 'message' => 'Usuario '.$MSJ.' con éxito'];
             break;
 
         default:

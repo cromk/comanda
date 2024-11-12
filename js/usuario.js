@@ -3,7 +3,7 @@ $(document).ready(function() {
     //Variables que tendran el id a seleccionar de la tabla
     var deleteUsuarioId = null;
     var editUsuarioId = null;
-    var estado = true;
+    var estado = null;
 
     //Expresion regular para el manejo de contraseña
     const pattern = new RegExp("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[.@$!%*?&;+\\-*/])[^\\s]{8,25}$");
@@ -45,7 +45,7 @@ $(document).ready(function() {
                 // Aquí podrías actualizar tu tabla o lista con los datos recibidos
                 $('#body-t').empty();
                 response.forEach(function(usuario) {
-                    if(usuario.estado_usuario)
+                    if(usuario.estado_usuario === 'H')
                     {
                         est = "Habilitado";
                         btn = '<td class="text-center"><button class="btn bg-gradient-danger rw-20 mb-0 toast-btn deleteButton" data-id="'+ usuario.id_usuario + '-' + usuario.estado_usuario + '">Deshabilitar</button></td>';
@@ -81,6 +81,7 @@ $(document).ready(function() {
         var mail = $('#mail').val();
         var password = $('#upassword').val();
         var confcontrasenia = $('#confcontrasenia').val();
+        var estado_usuario = $('#estado_usuario').val();
 
         if (!pattern.test(password)) {
             // Contraseña invalida
@@ -98,7 +99,7 @@ $(document).ready(function() {
 
             var url = '../controllers/UsuarioController.php';
             var method = 'POST';
-            var data = { id_tipo_usuario: id_tipo_usuario, nombre_usuario: nombre_usuario, apellido_usuario: apellido_usuario, mail: mail, password: password } ;
+            var data = { id_tipo_usuario: id_tipo_usuario, nombre_usuario: nombre_usuario, apellido_usuario: apellido_usuario, mail: mail, password: password , estado_usuario : estado_usuario } ;
 
             if (editUsuarioId !== null) {
                 method = 'PUT';
@@ -156,14 +157,14 @@ $(document).ready(function() {
 
     // Confirmar eliminación
     $('#confirmDeleteButton').click(function() {
-        var v = false;
-        if(estado) v = 0; else v = 1;
+        var ex = "";
+        if(estado==='H') ex = 'D'; else ex = 'H';
         if (deleteUsuarioId !== null) {
             $.ajax({
                 url: '../controllers/UsuarioController.php',
                 type: 'DELETE',
                 contentType: 'application/json',
-                data: JSON.stringify({ id: deleteUsuarioId, estado_usuario : v }),
+                data: JSON.stringify({ id: deleteUsuarioId, estado_usuario : ex }),
                 success: function(response) {
                     showMessage('success', response.message);
                     $('#confirmDeleteModal').modal('hide');

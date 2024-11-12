@@ -35,7 +35,7 @@
       <i class="fas fa-times p-3 cursor-pointer text-white opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
       <a class="navbar-brand m-0" href=" admin.php">
         <img src="../img/2.png" class="navbar-brand-img h-100" alt="main_logo">
-        <span class="ms-1 font-weight-bold text-white">Dashboard Admin</span>
+        <span class="ms-1 font-weight-bold text-white">Perfil Admin</span>
       </a>
     </div>
     <hr class="horizontal light mt-0 mb-2">
@@ -46,7 +46,7 @@
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
               <i class="material-icons opacity-10">dashboard</i>
             </div>
-            <span class="nav-link-text ms-1">Dashboard</span>
+            <span class="nav-link-text ms-1">Inicio</span>
           </a>
         </li>
         <li class="nav-item mt-3">
@@ -178,6 +178,13 @@
                   <label class="form-label" for="confcontrasenia">Confirmar Contraseña</label>
                   <input type="password" class="form-control border" id="confcontrasenia" required>
                 </div>
+                <div class="mb-2">
+                  <label class="form-label" for="estado_usuario">Estado Usuario</label>
+                  <select name="estado_usuario" id="estado_usuario" class="form-control border">
+                    <option value="H">Habilitado</option>
+                    <option value="D">Deshabilitado</option>
+                  </select>
+                </div>
                 <div class="input-group input-group-outline mb-2">
                   <button type="button" id="actionUsuarioButton" class="btn bg-gradient-success w-20 mb-0 toast-btn">Guardar</button>
                 </div>
@@ -239,10 +246,10 @@
           <span aria-hidden="true">x</span>
         </button>
       </div>
-      <div class="modal-body">¿Está seguro de que desea deshabilitar este usuario?</div>
+      <div class="modal-body">¿Está seguro de que desea cambiar el estado de este usuario?</div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-danger" id="confirmDeleteButton">Deshabilitar</button>
+          <button type="button" class="btn btn-danger" id="confirmDeleteButton">Modificar</button>
         </div>
       </div>
     </div>

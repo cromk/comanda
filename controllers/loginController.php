@@ -19,24 +19,29 @@ try {
 
         //Consultamos que tipo de respuesta se obtuvo del metodo
         if ($user) {
-            $_SESSION['user'] = $user['mail'];//Asignamos el correo como usuario de session
-            $_SESSION['user_id'] = $user['id_usuario'];//Asignamos el ID del usuario para poder ocuparla en el navegador para la gestión de pedidos
-            $_SESSION['tpu'] = $user['id_tipo_usuario'];//Asignamos el id del tipo usuario a una variable de sesion
-            if ($user['id_tipo_usuario'] == 1) {//Si es administrador
-                //Redirigimos al usuario a su vista
-                 $response = ['status' => 'success', 'redirect' => '../comanda/views/admin.php'];
-            } elseif ($user['id_tipo_usuario'] == 2) {//Si es mesero
-                //Redirigimos al usuario a su vista
-                $response = ['status' => 'success', 'redirect' => '../comanda/views/mesero.php'];
-            } elseif ($user['id_tipo_usuario'] == 3) {//Si es cocinero
-                //Redirigimos al usuario a su vista
-                $response = ['status' => 'success', 'redirect' => '../comanda/views/cocinero.php'];
-            }elseif ($user['id_tipo_usuario'] == 4) {//Si es cliente
-                //Redirigimos al usuario a su vista
-                $response = ['status' => 'success', 'redirect' => '../comanda/views/clinte.php'];
+            if($user['estado_usuario']=="H"){
+                $_SESSION['user'] = $user['mail'];//Asignamos el correo como usuario de session
+                $_SESSION['user_id'] = $user['id_usuario'];//Asignamos el ID del usuario para poder ocuparla en el navegador para la gestión de pedidos
+                $_SESSION['tpu'] = $user['id_tipo_usuario'];//Asignamos el id del tipo usuario a una variable de sesion
+                if ($user['id_tipo_usuario'] == 1) {//Si es administrador
+                    //Redirigimos al usuario a su vista
+                     $response = ['status' => 'success', 'redirect' => '../comanda/views/admin.php'];
+                } elseif ($user['id_tipo_usuario'] == 2) {//Si es mesero
+                    //Redirigimos al usuario a su vista
+                    $response = ['status' => 'success', 'redirect' => '../comanda/views/mesero.php'];
+                } elseif ($user['id_tipo_usuario'] == 3) {//Si es cocinero
+                    //Redirigimos al usuario a su vista
+                    $response = ['status' => 'success', 'redirect' => '../comanda/views/cocinero.php'];
+                }elseif ($user['id_tipo_usuario'] == 4) {//Si es cliente
+                    //Redirigimos al usuario a su vista
+                    $response = ['status' => 'success', 'redirect' => '../comanda/views/clinte.php'];
+                }
+                else {//Cualquier otro tipo de usuario redirige al login
+                    $response = ['status' => 'success', 'redirect' => '../comanda/login.php?er=na'];
+                }
             }
-            else {//Cualquier otro tipo de usuario redirige al login
-                $response = ['status' => 'success', 'redirect' => '../comanda/login.php?er=na'];
+            else{
+                $response = ['status' => 'error', 'message' => 'Usuario deshabilitado'];
             }
         } else {//Si el correo o la contraseña son incorrectos mostramos un mensaje de error
             throw new Exception('Correo o contraseña incorrectos ' .$user. " ERROR");
