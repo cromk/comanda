@@ -141,7 +141,7 @@ $(document).ready(function() {
     const detalles = $('#body-t').data('detalles-factura');
     const id_mesero = $('#id_mesero').val();
 
-    // Guardar factura y cambiar estado a Cancelado
+    // Guardar factura y cambiar estado a Finalizado
     $.ajax({
       url: '../controllers/FacturaController.php',
       type: 'POST',
