@@ -185,7 +185,7 @@ elseif (!isset($_SESSION['user']) || $_SESSION['tpu'] > 3)
               <div id="btns" class="d-grid gap-2 d-md-flex justify-content-md-end margen-form">
               </div>
               <div class="d-grid gap-2 d-md-flex justify-content-md margen-form">
-                ID Cajero: <input type="text" name="id_cajero" id="id_cajero" disabled value="<?php echo $_SESSION['user_id']; ?>">
+                ID Mesero: <input type="text" name="id_mesero" id="id_mesero" disabled value="<?php echo $_SESSION['user_id']; ?>">
               </div>
               <div class="table-responsive p-0">
                 <table class="table align-items-center mb-0" id="tipoUsuarioTable">

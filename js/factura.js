@@ -52,9 +52,17 @@ $(document).ready(function() {
     const tbody = $('#body-t');
     tbody.empty();
     let totalGlobal = 0; // Inicializamos el total global
+    let detallesFactura = []; // Array para los detalles de la factura
     data.lineas_pedido.forEach((item, index) => {
       const totalLinea = item.cantidad * item.precio_unitario;
       totalGlobal += totalLinea; // Sumamos el total de cada línea al total global
+      // Agregamos los detalles de la factura
+        detallesFactura.push({
+          id_item: item.id_item,
+          cantidad: item.cantidad,
+          precio_unitario: item.precio_unitario
+      });
+
       tbody.append(`
         <tr>
           <td class="text-center">${index + 1}</td>
@@ -74,6 +82,9 @@ $(document).ready(function() {
     `);
     // Guardamos el total global en un atributo de datos para usarlo en el PDF
     $('#body-t').data('total-global', totalGlobal.toFixed(2));
+
+    // Guardamos los detalles de la factura en un atributo de datos
+    $('#body-t').data('detalles-factura', detallesFactura);
   }
 
   // Generar y descargar la factura en PDF
@@ -92,6 +103,7 @@ $(document).ready(function() {
     doc.text("Restaurante Mar y Tierra", 105, 10, { align: "center" });
     doc.setFontSize(12);
     doc.text(`ID Pedido: ${pedidoId}`, 10, 30);
+    //doc.text(`\nID Factura: ${facturaId}`, 10, 30);
     doc.text("\n\n Factura Comercial", 105, 10, { align: "center" });
     const fecha = new Date();
      const fechaFormateada = fecha.toISOString().split('T')[0];
@@ -125,16 +137,22 @@ $(document).ready(function() {
     doc.text(`Total Global: $ ${totalGlobalPDF}`, 180, yPosition, { align: "right" });
     // Descargar el PDF
     doc.save(`Factura_Pedido_${pedidoId}.pdf`);
-// Guardar factura y cambiar estado a Cancelado
+
+    const detalles = $('#body-t').data('detalles-factura');
+    const id_mesero = $('#id_mesero').val();
+
+    // Guardar factura y cambiar estado a Finalizado
     $.ajax({
       url: '../controllers/FacturaController.php',
       type: 'POST',
-      data: {
+      contentType:'application/json',
+      data: JSON.stringify({
         id_pedido: pedidoId,
-        id_cajero: 6,
+        id_mesero: id_mesero,
         fecha_factura: fechaFormateada, 
-        total: totalGlobalPDF
-      },
+        total: totalGlobalPDF,
+        detalles: detalles
+      }),
       success: function() {
         // Si la factura se guarda correctamente, cambiamos el estado del pedido a "Finalizado"
         $.ajax({
@@ -146,7 +164,7 @@ $(document).ready(function() {
             if (response.status === 'success') {
               $('#pedidos option:selected').remove(); // Eliminar de la lista de selección
               $('#body-t').empty(); // Vaciar la tabla de detalles
-              alert("Pedido facturado y marcado como Finalizado con éxito.");
+              alert("Pedido facturado y marcado como finalizado con éxito.");
             } else {
               alert("Error al cambiar el estado del pedido a Finalizado.");
             }
@@ -159,6 +177,6 @@ $(document).ready(function() {
       error: function() {
         alert("Error al guardar la factura en el sistema.");
       }
-    });
+   }); 
   });
 });
