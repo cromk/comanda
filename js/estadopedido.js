@@ -45,7 +45,10 @@ $(document).ready(function () {
             type: 'GET',
             dataType: 'JSON',
             success: function(response) {
-                console.log(response);
+                $('#btns').empty();
+                $('#fin').empty();
+                $('#btns').append('<button type="button" id="newProduct" class="btn bg-gradient-info toast-btn" data-bs-toggle="modal" data-bs-target="#productModal">+ PRODUCTO</button>');
+                $('#fin').append('<div class="mb-2"><button type="button" id="modificarPedido" class="btn bg-gradient-warning toast-btn">Modificar Pedido</button></div>');
                 var productsTable = $('#productsTable').DataTable();
                 productsTable.clear();
                 response.forEach(function(producto) {
@@ -61,6 +64,13 @@ $(document).ready(function () {
                 //showMessage('danger', "Error al cargar productos: " + textStatus + " - " + errorThrown);
             }
         });
+    });
+
+    // Inicializa DataTables
+    $('#productsTable').DataTable({
+        "language": {
+            "url": "https://cdn.datatables.net/plug-ins/1.11.3/i18n/es_es.json"
+        }
     });
 
 });

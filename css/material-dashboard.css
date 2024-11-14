@@ -27989,7 +27989,8 @@ pre[class*="language-"] {
   flex-shrink: 0;
 }
 
-input[type="search"][aria-controls="tablePedidos"] {
+input[type="search"][aria-controls="tablePedidos"],
+input[type="search"][aria-controls="productsTable"] {
   /* Estilos personalizados aquí */
   background-color: #f5f5f5; /* Ejemplo de fondo */
   border: 2px solid; /* Ejemplo de borde */
