@@ -27,5 +27,12 @@ class Estado {
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function update($id) {
+        $query = "UPDATE " . $this->table_primary . " SET estado = 'Cancelado' WHERE id_pedido = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $id);
+        return $stmt->execute();
+    }
 }
 ?>

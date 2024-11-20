@@ -223,6 +223,24 @@ session_start();
     </div>
   </div>
 
+  <div class="modal fade" id="confirmCancelModal" tabindex="-1" role="dialog" aria-labelledby="confirmCancelModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="confirmCancelModalLabel">Confirmar de Cancelacion</h5>
+          <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">x</span>
+          </button>
+        </div>
+        <div class="modal-body">¿Está seguro de que desea cancelar el pedido?</div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">NO</button>
+          <button type="button" class="btn btn-danger" id="confirmCancelButton">SI</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!--   Core JS Files   -->
   <script src="../js/core/popper.min.js"></script>
   <script src="../js/core/bootstrap.min.js"></script>

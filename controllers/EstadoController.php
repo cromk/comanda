@@ -17,7 +17,17 @@ try {
             break;
 
         case 'PUT':
-            
+            $data = json_decode(file_get_contents("php://input"), true);
+            // Verifica que se hayan pasado los campos 'id' y 'nombre_categoria'
+            if (!isset($data['id'])) {
+                // Si no, lanza una excepción indicando datos incompletos
+                throw new Exception('Datos incompletos');
+            }
+            // Llama al método update del modelo para actualizar la categoría especificada
+            $estadoModel->update($data['id']);
+            // Establece la respuesta indicando éxito
+            $response = ['status' => 'success', 'message' => 'Categoria de menú actualizada con éxito'];
+            break;
             break;
 
         default:

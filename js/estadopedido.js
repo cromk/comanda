@@ -1,5 +1,7 @@
 $(document).ready(function () {
 
+    var cancelID = null;
+
     //Funcion para cargar los pedidos existentes
     function cargarPedidos() {
         $.ajax({
@@ -70,6 +72,32 @@ $(document).ready(function () {
     $('#productsTable').DataTable({
         "language": {
             "url": "https://cdn.datatables.net/plug-ins/1.11.3/i18n/es_es.json"
+        }
+    });
+
+    ///
+    $('#tablePedidos').on('click', '#cancelarPedido', function() {
+        cancelID = $(this).data('id'); // Obtener el ID de la categoría a eliminar
+        $('#confirmCancelModal').modal('show'); // Mostrar el modal de confirmación de eliminación
+    });
+
+    // Confirmar la eliminación de la categoría
+    $('#confirmCancelButton').click(function() {
+        if (cancelID !== null) {
+            $.ajax({// Enviar solicitud AJAX para eliminar la categoría
+                url: '../controllers/EstadoController.php',
+                type: 'PUT',
+                contentType: 'application/json',
+                data: JSON.stringify({ id: cancelID }),
+                success: function(response) {
+                    $('#confirmCancelModal').modal('hide'); // Ocultar el modal de confirmación
+                    cargarPedidos(); // Actualizar la lista de categorías
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    // Mostrar mensaje de error
+                    //showMessage('danger', "Error en la solicitud: " + textStatus + " - " + errorThrown);
+                }
+            });
         }
     });
 
