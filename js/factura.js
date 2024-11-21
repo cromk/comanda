@@ -175,7 +175,7 @@ $(document).ready(function() {
         });
       },
       error: function() {
-        alert("Error al guardar la factura en el sistema.");
+        //alert("Error al guardar la factura en el sistema.");
       }
    }); 
   });

@@ -34,10 +34,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($success) {
             echo json_encode(['status' => 'success', 'id_factura' => $id_factura]);
         } else {
-            echo json_encode(['status' => 'error', 'message' => 'Error al guardar la factura.']);
+            echo json_encode(['status' => 'error', 'message' => 'Error al guardar la factura.'. $success]);
         }
     } else {
-        echo json_encode(['status' => 'error', 'message' => 'Método de solicitud no permitido.']);
+        echo json_encode(['status' => 'error', 'message' => 'Método de solicitud no permitido.'.$success]);
     }
 }
 ?>
