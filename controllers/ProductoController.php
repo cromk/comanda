@@ -34,7 +34,7 @@ try {
                 $response = $productoModel->read($_GET['id']);
             } else {
                 // Si no se pasa ningún parámetro, lee todos los productos
-                $response = $productoModel->readAvailable();
+                $response = $productoModel->readAll();
             }
             break;
 
@@ -119,11 +119,11 @@ try {
         case 'DELETE':
             // Obtiene los datos de la solicitud DELETE, generalmente enviados en el cuerpo de la solicitud
             $data = json_decode(file_get_contents("php://input"), true);
-            if (!isset($data['id'])) {
+            if (!isset($data['id']) && !isset($data['estado'])) {
                 throw new Exception('Datos incompletos');
             }
             // Llama al método delete del modelo de Producto
-            $productoModel->delete($data['id']);
+            $productoModel->delete($data['id'],$data['estado']);
             $response = ['status' => 'success', 'message' => 'Producto eliminado con éxito'];
             break;
 

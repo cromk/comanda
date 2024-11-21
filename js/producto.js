@@ -2,6 +2,7 @@ $(document).ready(function() {
 
     var deleteProductoId = null;
     var editProductoId = null;
+    var estado = null;
 
     function loadCategorias() {
         $.ajax({
@@ -114,12 +115,16 @@ $(document).ready(function() {
 
     // Abrir modal de confirmación de eliminación
     $('#productoTable').on('click', '.deleteButton', function() {
-        deleteProductoId = $(this).data('id');
+        dataId = $(this).data('id');
+        let [indicator1, indicator2] = dataId.split('-');
+        deleteProductoId = indicator1;
+        estado = indicator2;
         $('#confirmDeleteModal').modal('show');
     });
 
     $('#productoTable').on('click', '.editButton', function() {
         var id = $(this).data('id');
+
         $.ajax({
             url: '../controllers/ProductoController.php?id=' + id,
             type: 'GET',
@@ -141,12 +146,14 @@ $(document).ready(function() {
 
     // Confirmar eliminación
     $('#confirmDeleteButton').click(function() {
+        if (estado==='D') { estado = 'A'; }
+        else { estado = 'D'; }
         if (deleteProductoId !== null) {
             $.ajax({
                 url: '../controllers/ProductoController.php',
                 type: 'DELETE',
                 contentType: 'application/json',
-                data: JSON.stringify({ id: deleteProductoId }),
+                data: JSON.stringify({ id: deleteProductoId , estado : estado}),
                 success: function(response) {
                     showMessage('success', response.message);
                     $('#confirmDeleteModal').modal('hide');

@@ -78,10 +78,11 @@ class Producto {
         return $stmt->execute();
     }
 
-    public function delete($id) {
-        $query = "DELETE FROM " . $this->table_name . " WHERE id_item = :id";
+    public function delete($id,$estado) {
+        $query = "UPDATE " . $this->table_name . " SET estado = :estado WHERE id_item = :id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':estado', $estado);
         return $stmt->execute();
     }
 
